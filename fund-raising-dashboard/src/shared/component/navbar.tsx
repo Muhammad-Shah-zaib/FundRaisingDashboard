@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar(){
     return (
@@ -23,12 +23,17 @@ export default function Navbar(){
                 {/* container for the navbar */}
                 <div className="text-lg font-medium flex flex-col gap-4">
                     <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">
-                        <Link to={'/dashboard'}>Dashboard</Link>
+                        <NavLink to={'/dashboard'}>Dashboard</NavLink>
                         </span>
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">Causes & Bank</span>
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">Cases</span>
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">Management Team</span>
-                </div>
+                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">
+                        <NavLink to={'/causes-Bank'}>Causes & Bank</NavLink>
+                        </span>
+                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">
+                        <NavLink to={'Cases'}>Cases</NavLink></span>
+                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition transition-all duration-300">
+                        <NavLink to={'Mangement Team'}>Management Team</NavLink>
+                        </span>
+                </div>Cases
             </div>
 
         </div>
