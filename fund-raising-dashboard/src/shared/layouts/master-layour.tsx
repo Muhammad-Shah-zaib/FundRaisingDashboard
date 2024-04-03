@@ -13,7 +13,7 @@ export default function MasterLayout(){
                     <Navbar></Navbar>
                 </div>
 
-                <div className="col-span-9 h-full w-full bg-white rounded-lg grid grid-cols-12">
+                <div className="col-span-9 h-full w-full bg-white grid grid-cols-12 rounded-lg overflow-hidden">
                     {/* Container for main component */}
                     <div className="col-span-8 h-full w-full">
                         <Outlet></Outlet>

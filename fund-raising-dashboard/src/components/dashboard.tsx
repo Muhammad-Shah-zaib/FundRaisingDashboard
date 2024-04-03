@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 
 export function Dashboard() {
@@ -6,12 +7,15 @@ export function Dashboard() {
             {/* Container */}
             <div className="h-full w-full flex flex-col gap-8 px-16 py-4">
 
-                {/* header */}
+                {/* 
+                * header 
+                * Cause Bank
+                */}
                 <header className="flex w-full">
-                    <div className="w-full py-3 px-2 bg-sky-100 rounded-lg shadow-md flex flex-col gap-4">
+                    <Link to={'/causes-bank'} className="hover:shadow-sm shadow-slate-400 transition-shadow duration-300 cursor-pointer w-full py-3 px-2 bg-sky-100 rounded-lg shadow-md flex flex-col gap-4">
                         <h2 className="text-3xl font-bold opacity-60">Cause Bank:</h2>
                         <span className="text-4xl font-bold self-center">283,990 Rs</span>
-                    </div>
+                    </Link>
                 </header>
 
                 {/* Donation Received */}
@@ -49,7 +53,7 @@ export function Dashboard() {
                                 <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
                             </div>
 
-                             {/* single content container */}
+                            {/* single content container */}
                             <div className="grid grid-cols-4 w-full">
 
                                 {/* title and picture */}
@@ -202,7 +206,7 @@ export function Dashboard() {
                                 <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
                             </div>
                         </div>
-                        </div>
+                    </div>
 
 
                 </div>
