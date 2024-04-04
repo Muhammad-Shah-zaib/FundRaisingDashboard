@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function MasterLayout() {
     // using state to toggle the side bar
-    const [showSideBar, setShowSideBar] = useState<boolean>(false);
+    const [showSideBar, setShowSideBar] = useState<boolean>(true);
 
     // this function will toggle the side bar
     const toggleSideBar = (state: boolean) => {
