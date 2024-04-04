@@ -26,8 +26,6 @@ export default function CausesAndBank() {
 
                 {/* Create new Cause */}
                 <Sheet>
-                </Sheet>
-                <Sheet>
                     <SheetTrigger asChild>
                         <div className="group flex justify-between items-center w-full bg-green-100 hover:bg-green-300 hover:shadow-green-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-md shadow-slate-400 ">
                             <span className="font-bold text-primary text-2xl">
