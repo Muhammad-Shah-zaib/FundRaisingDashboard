@@ -12,10 +12,12 @@ export default function MasterLayout() {
         setShowSideBar(state);
     }
     let sideBarClass = showSideBar ? "col-span-4" : "hidden";
+    let wideMainComponentClass = showSideBar ? "col-span-8" : "col-span-12";
 
     // hook to keep track of state of the side bar
     useEffect(() => {
         sideBarClass = showSideBar ? "col-span-4" : "hidden";
+        wideMainComponentClass = showSideBar ? "col-span-8" : "col-span-12";
     }, [showSideBar])
 
 
@@ -29,9 +31,9 @@ export default function MasterLayout() {
                     <Navbar ToggleSideBarFn={toggleSideBar}></Navbar>
                 </div>
 
-                <div className="col-span-9 h-full w-full bg-white grid grid-cols-12 rounded-lg">
+                <div className={`col-span-9 h-full w-full bg-white grid grid-cols-12 rounded-lg`}>
                     {/* Container for main component */}
-                    <div className="col-span-8 h-full w-full">
+                    <div className={`${wideMainComponentClass} h-full w-full`}>
                         <Outlet></Outlet>
                     </div>
 

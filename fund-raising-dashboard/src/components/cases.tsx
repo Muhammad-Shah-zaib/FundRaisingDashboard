@@ -180,7 +180,7 @@ export default function Cases() {
 
 
                 {/* Table goes here */}
-                <div className="w-[60vw] overflow-auto">
+                <div className="h-[60vh] overflow-auto">
                     <Table>
                         <TableCaption>List of cases ends here.</TableCaption>
                         <TableHeader>

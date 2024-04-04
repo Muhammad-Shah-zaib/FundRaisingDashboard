@@ -27,7 +27,7 @@ export default function CausesAndBank() {
                 {/* Create new Cause */}
                 <Sheet>
                     <SheetTrigger asChild>
-                        <div className="group flex justify-between items-center w-full bg-green-100 hover:bg-green-300 hover:shadow-green-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-md shadow-slate-400 ">
+                        <div className="cursor-pointer group flex justify-between items-center w-full bg-slaate-50 hover:bg-slate-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-md shadow-slate-300 ">
                             <span className="font-bold text-primary text-2xl">
                                 Create New Cause
                             </span>
@@ -52,26 +52,14 @@ export default function CausesAndBank() {
                                 Make changes to your profile here. Click save when you're done.
                             </SheetDescription>
                         </SheetHeader>
-                        <form className="flex flex-col gap-2 py-4">
+                        <form className="flex flex-col gap-4 py-4">
                             {/* First Name */}
                             <div className="grid items-center gap-3 grid-cols-3">
-                                <span><label htmlFor="firstname" className="text-base font-medium text-primary cursor-pointer">First Name: </label></span>
-                                <input id="firstname" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="John" />
+                                <span><label htmlFor="causename" className="text-base font-medium text-primary cursor-pointer">Cause Name: </label></span>
+                                <input id="causename" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="John" />
                             </div>
-                            {/* Last Name */}
-                            <div className="grid items-center gap-3 grid-cols-3">
-                                <span><label htmlFor="lastname" className="text-base font-medium text-primary cursor-pointer">Last Name: </label></span>
-                                <input id="lastname" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="Wick" />
-                            </div>
-                            {/* Email */}
-                            <div className="grid items-center gap-3 grid-cols-3">
-                                <span><label htmlFor="email" className="text-base font-medium text-primary cursor-pointer">Email: </label></span>
-                                <input id="email" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="example@gmail.com" />
-                            </div>
-                            {/* Password */}
-                            <div className="grid items-center gap-3 grid-cols-3">
-                                <span><label htmlFor="password" className="text-base font-medium text-primary cursor-pointer">Password: </label></span>
-                                <input id="password" type="password" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="********" />
+                            <div className="w-full">
+                                <button className="text-lg font-medium w-full text-center bg-slate-100 rounded-lg px-4 py-2 hover:bg-slate-300 transition-all duration-300 shadow-md shadow-slate-300">Create</button>
                             </div>
 
                         </form>
@@ -84,9 +72,9 @@ export default function CausesAndBank() {
 
 
                 {/* Current Cause and there Balance */}
-                <div className="grid grid-cols-2 gap-4 overflow-scroll p-2 h-[58vh]">
+                <div className="grid grid-cols-2 gap-4 overflow-scroll p-2 max-h-[56vh] relative">
                     {/* Single Card */}
-                    <div className="cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 rounded-lg shadow-lg">
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                         <div className="w-full flex items-center justify-between">
                             <span className="text-start text-xl font-black">
                                 Ration Drive
@@ -96,7 +84,40 @@ export default function CausesAndBank() {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="w-9 h-9 text-red-400 hover:text-red-600"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <p className="text-lg font-medium ">Money Present</p>
+                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <p className="text-lg font-medium ">Money Donated So far</p>
+                            <span className="text-xl font-bold text-primary">176, 555</span>
+                        </div>
+                    </div>
+
+
+                    {/* Single Card */}
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
+                        <div className="w-full flex items-center justify-between">
+                            <span className="text-start text-xl font-black">
+                                Ration Drive
+                            </span>
+                            <span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -118,7 +139,7 @@ export default function CausesAndBank() {
                     </div>
 
                     {/* Single Card */}
-                    <div className="cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 rounded-lg shadow-lg">
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                         <div className="w-full flex items-center justify-between">
                             <span className="text-start text-xl font-black">
                                 Ration Drive
@@ -128,7 +149,7 @@ export default function CausesAndBank() {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="w-9 h-9 text-red-400 hover:text-red-600"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -150,7 +171,7 @@ export default function CausesAndBank() {
                     </div>
 
                     {/* Single Card */}
-                    <div className="cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 rounded-lg shadow-lg">
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                         <div className="w-full flex items-center justify-between">
                             <span className="text-start text-xl font-black">
                                 Ration Drive
@@ -160,7 +181,7 @@ export default function CausesAndBank() {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="w-9 h-9 text-red-400 hover:text-red-600"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -182,7 +203,7 @@ export default function CausesAndBank() {
                     </div>
 
                     {/* Single Card */}
-                    <div className="cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 rounded-lg shadow-lg">
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                         <div className="w-full flex items-center justify-between">
                             <span className="text-start text-xl font-black">
                                 Ration Drive
@@ -192,7 +213,40 @@ export default function CausesAndBank() {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="w-9 h-9 text-red-400 hover:text-red-600"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <p className="text-lg font-medium ">Money Present</p>
+                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <p className="text-lg font-medium ">Money Donated So far</p>
+                            <span className="text-xl font-bold text-primary">176, 555</span>
+                        </div>
+                    </div>
+
+
+                    {/* Single Card */}
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
+                        <div className="w-full flex items-center justify-between">
+                            <span className="text-start text-xl font-black">
+                                Ration Drive
+                            </span>
+                            <span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -214,7 +268,7 @@ export default function CausesAndBank() {
                     </div>
 
                     {/* Single Card */}
-                    <div className="cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 rounded-lg shadow-lg">
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                         <div className="w-full flex items-center justify-between">
                             <span className="text-start text-xl font-black">
                                 Ration Drive
@@ -224,7 +278,7 @@ export default function CausesAndBank() {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="w-9 h-9 text-red-400 hover:text-red-600"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -246,7 +300,7 @@ export default function CausesAndBank() {
                     </div>
 
                     {/* Single Card */}
-                    <div className="cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 rounded-lg shadow-lg">
+                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                         <div className="w-full flex items-center justify-between">
                             <span className="text-start text-xl font-black">
                                 Ration Drive
@@ -256,7 +310,7 @@ export default function CausesAndBank() {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="w-9 h-9 text-red-400 hover:text-red-600"
+                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -276,7 +330,18 @@ export default function CausesAndBank() {
                             <span className="text-xl font-bold text-primary">176, 555</span>
                         </div>
                     </div>
+
+
+
+
+
+
+
+
+
+
                 </div>
+
             </div>
         </>
     );
