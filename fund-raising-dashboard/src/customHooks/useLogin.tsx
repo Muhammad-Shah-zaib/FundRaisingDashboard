@@ -15,7 +15,7 @@ interface ILoginResponseDto {
 function useLogin() {
     const navigate = useNavigate();
     // stop the default refresh of the page
-    return () => {
+    return async () => {
         // get the values from the from
         const email = (document.getElementById('email') as HTMLInputElement).value;
         const password = (document.getElementById('password') as HTMLInputElement).value;
@@ -35,13 +35,7 @@ function useLogin() {
                 })
             )
 
-        req.subscribe({
-            // catcking error during requeset
-            error: (err) => {
-                console.log(err);
-                navigate('/login');
-            }
-        });
+        return req;
     }
 
 }

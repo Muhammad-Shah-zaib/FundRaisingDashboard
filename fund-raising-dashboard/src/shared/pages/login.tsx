@@ -1,17 +1,30 @@
 import useLogin from '@/customHooks/useLogin';
 import './login.css';
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect } from 'react';
+import { TailSpin } from 'react-loader-spinner';
 
 function Login() {
     // Hooks
-
+    
     // Custom Hooks
     const login = useLogin();
 
+    useEffect(() => {
+        stopSpinner('login-spinner');
+    }, [])
     // handling form submissoin here
-    const handleOnSubmit = (e: MouseEvent)=> {
+    const handleOnSubmit = async (e: MouseEvent)=> {
         e.preventDefault();
-        login();
+        // starting the loading spinner
+        startSpinner('login-spinner');
+        const req = await login();
+        req.subscribe({
+            next: () => stopSpinner('login-spinner'),
+            error: (err) => {
+                console.log(err);
+                stopSpinner('login-spinner');
+            }
+        })
     }
     return (
         // Container for my div
@@ -48,7 +61,12 @@ function Login() {
             </div>
 
             {/* Login Form container */}
-            <div className="w-full flex px-20 justify-center items-center">
+            <div className="relative w-full flex px-20 justify-center items-center">
+                <div id='login-spinner' className='hidden absolute w-full h-full z-20 bg-black opacity-60'>
+                    <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
+                        <TailSpin height={40} width={40} radius={1} visible={true}></TailSpin>
+                    </div>
+                </div>
                 <div className='flex flex-col gap-4 w-[400px] '>
                     {/* /HEADER */}
                     <header className='flex flex-col gap-2'>
@@ -59,7 +77,7 @@ function Login() {
                     {/* FORM */}
                     <body>
 
-                        <form className='flex flex-col gap-4'>
+                        <form className='relative flex flex-col gap-4'>
                             {/* email and password */}
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="email" className='font-medium text-[#696F79]'>Email: </label>
@@ -95,5 +113,13 @@ function Login() {
     )
 }
 
+
+function startSpinner( id: string){
+    document.getElementById(id)?.classList.remove('hidden');
+}
+
+function stopSpinner( id: string){
+    document.getElementById(id)?.classList.add('hidden');
+}
 
 export default Login;
