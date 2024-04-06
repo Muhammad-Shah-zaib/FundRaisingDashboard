@@ -1,0 +1,25 @@
+.bg-primary {
+    @apply bg-[#2C73EB]
+}
+
+.border-primary {
+    @apply border-[#1565D8] shadow-lg  shadow-slate-300;
+}
+.border-primary:placeholder-shown {
+    @apply border-[#8692A6] shadow-none;
+}
+.border-primary:focus{
+    @apply border-[#1565D8]
+}
+.transition-primary {
+    @apply transition-all duration-300 ease-in-out
+}
+
+
+
+.input-primary {
+    @apply outline-none border-2 border-primary rounded-lg px-4 py-2 text-base transition-primary;
+}
+.form-btn-primary {
+    @apply w-full px-5 py-3 font-bold text-white text-lg rounded-md transition-primary bg-sky-500 hover:bg-sky-600 active:bg-sky-700;
+}
