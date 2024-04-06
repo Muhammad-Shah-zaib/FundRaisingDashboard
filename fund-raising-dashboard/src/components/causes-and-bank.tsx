@@ -1,9 +1,7 @@
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -63,10 +61,6 @@ export default function CausesAndBank() {
                             </div>
 
                         </form>
-                        <SheetFooter>
-                            <SheetClose asChild>
-                            </SheetClose>
-                        </SheetFooter>
                     </SheetContent>
                 </Sheet>
 

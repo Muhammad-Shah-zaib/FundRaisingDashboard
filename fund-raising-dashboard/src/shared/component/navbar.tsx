@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import './navbar.css';
 
 interface NavbarProps {
     ToggleSideBarFn: (state: boolean) => void;
@@ -25,16 +26,16 @@ export default function Navbar({ ToggleSideBarFn }: NavbarProps) {
 
                 {/* container for the navbar */}
                 <div className="text-lg font-medium flex flex-col gap-1">
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 hover:bg-slate-800 px-4 py-2 rounded-lg">
-                        <NavLink onClick={() => ToggleSideBarFn(true)} to={'/dashboard'}>Dashboard</NavLink>
+                    <span className="cursor-pointer transition-all duration-300  rounded-lg">
+                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(true)} to={'/dashboard'}>Dashboard</NavLink>
                     </span>
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 hover:bg-slate-800 px-4 py-2 rounded-lg">
-                        <NavLink onClick={() => ToggleSideBarFn(true)} to={'/causes-Bank'}>Causes & Bank</NavLink>
+                    <span className="cursor-pointer transition-all duration-300  rounded-lg">
+                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(true)} to={'/causes-Bank'}>Causes & Bank</NavLink>
                     </span>
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 hover:bg-slate-800 px-4 py-2 rounded-lg">
-                        <NavLink onClick={() => ToggleSideBarFn(false)} to={'Cases'}>Cases</NavLink></span>
-                    <span className="cursor-pointer opacity-50 hover:opacity-100 transition-all duration-300 hover:bg-slate-800 px-4 py-2 rounded-lg">
-                        <NavLink onClick={() => ToggleSideBarFn(false)} to={'Management-Team'}>Management Team</NavLink>
+                    <span className="cursor-pointer transition-all duration-300  rounded-lg">
+                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(false)} to={'Cases'}>Cases</NavLink></span>
+                    <span className="cursor-pointer transition-all duration-300  rounded-lg">
+                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(false)} to={'Management-Team'}>Management Team</NavLink>
                     </span>
                 </div>
             </div>
