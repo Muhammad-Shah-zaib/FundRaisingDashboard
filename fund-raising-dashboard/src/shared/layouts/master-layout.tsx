@@ -25,7 +25,7 @@ export default function MasterLayout() {
                     <Navbar ToggleSideBarFn={toggleSideBar}></Navbar>
                 </div>
 
-                <div className={`col-span-9 h-full w-full bg-white grid grid-cols-12 rounded-lg`}>
+                <div className={`col-span-9 h-full w-full bg-white grid grid-cols-12 rounded-lg overflow-hidden`}>
                     {/* Container for main component */}
                     <div className={`${wideMainComponentClass} h-full w-full`}>
                         <Outlet></Outlet>

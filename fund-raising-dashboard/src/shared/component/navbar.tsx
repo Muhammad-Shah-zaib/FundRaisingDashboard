@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import './navbar.css';
 
 interface NavbarProps {
@@ -7,9 +7,16 @@ interface NavbarProps {
 
 export default function Navbar({ ToggleSideBarFn }: NavbarProps) {
     const href = useLocation();
+    const navigate = useNavigate();
     console.log(href);
     if (href.pathname.includes(`Cases`) || href.pathname.includes(`Management-Team`)) {
         ToggleSideBarFn(false);
+    }
+    const handleLogOut = () => {
+        if (confirm("Are you sure you want to log out?")){
+            localStorage.removeItem('token');
+            navigate('login');
+        }
     }
 
     return (
@@ -39,9 +46,14 @@ export default function Navbar({ ToggleSideBarFn }: NavbarProps) {
                         <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(true)} to={'/causes-Bank'}>Causes & Bank</NavLink>
                     </span>
                     <span className="cursor-pointer transition-all duration-300  rounded-lg">
-                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100 `} onClick={() => ToggleSideBarFn(false)} to={'Cases'}>Cases</NavLink></span>
+                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100 `} onClick={() => ToggleSideBarFn(false)} to={'/Cases'}>Cases</NavLink></span>
                     <span className="cursor-pointer transition-all duration-300  rounded-lg">
-                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(false)} to={'Management-Team'}>Management Team</NavLink>
+                        <NavLink className={`w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(false)} to={'/Management-Team'}>Management Team</NavLink>
+                    </span>
+                    <span className="cursor-pointer transition-all duration-300  rounded-lg">
+                        <button onClick={() => handleLogOut()} className={`text-start w-full h-full px-4 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`}>
+                            Log Out
+                        </button>
                     </span>
                 </div>
             </div>

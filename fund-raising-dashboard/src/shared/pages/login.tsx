@@ -1,7 +1,18 @@
-import { Link } from 'react-router-dom';
+import useLogin from '@/customHooks/useLogin';
 import './login.css';
+import { MouseEvent } from 'react';
 
 function Login() {
+    // Hooks
+
+    // Custom Hooks
+    const login = useLogin();
+
+    // handling form submissoin here
+    const handleOnSubmit = (e: MouseEvent)=> {
+        e.preventDefault();
+        login();
+    }
     return (
         // Container for my div
         // Dividing the screen into two divs 
@@ -52,12 +63,12 @@ function Login() {
                             {/* email and password */}
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="email" className='font-medium text-[#696F79]'>Email: </label>
-                                <input className='input-primary' id='email' type="text" placeholder='example@gmail.com' />
+                                <input className='input-primary' id='email' type="email" placeholder='example@gmail.com' />
                             </span>
 
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="password" className='font-medium text-[#696F79]'>Password</label>
-                                <input className='input-primary' id='password' type="text" placeholder='*********' />
+                                <input className='input-primary' id='password' type="password" placeholder='*********' />
                             </span>
 
                             {/* Remember me check box */}
@@ -67,7 +78,7 @@ function Login() {
                             </span>
 
                             {/* submit button */}
-                            <button onClick={(e) => e.preventDefault()} type='submit' className='form-btn-primary'>Login</button>
+                            <button onClick={(e) => handleOnSubmit(e)} type='submit' className='form-btn-primary'>Login</button>
                         </form>
 
                     </body>
@@ -75,7 +86,7 @@ function Login() {
                     {/* FOOTER */}
                     <footer>
                         {/* Asking to Register */}
-                        <p className='text-center select-none pointer-events-none text-[#696F79]'>Don't Have an account ? <Link className='pointer-events-auto text-[#2C73EB] font-medium hover:underline' to={'/Register'}>Sign Up here</Link></p>
+                        <p className='text-center select-none pointer-events-none text-[#696F79]'>Don't Have an account ? </p>
                     </footer>
                 </div>
             </div>
@@ -83,5 +94,6 @@ function Login() {
         </div >
     )
 }
+
 
 export default Login;
