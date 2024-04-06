@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../component/navbar";
 import SideInfoBar from "../component/side-Info-bar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function MasterLayout() {
     // using state to toggle the side bar
@@ -11,14 +11,8 @@ export default function MasterLayout() {
     const toggleSideBar = (state: boolean) => {
         setShowSideBar(state);
     }
-    let sideBarClass = showSideBar ? "col-span-4" : "hidden";
-    let wideMainComponentClass = showSideBar ? "col-span-8" : "col-span-12";
-
-    // hook to keep track of state of the side bar
-    useEffect(() => {
-        sideBarClass = showSideBar ? "col-span-4" : "hidden";
-        wideMainComponentClass = showSideBar ? "col-span-8" : "col-span-12";
-    }, [showSideBar])
+    const sideBarClass = showSideBar ? "col-span-4" : "hidden";
+    const wideMainComponentClass = showSideBar ? "col-span-8" : "col-span-12";
 
 
     return (
