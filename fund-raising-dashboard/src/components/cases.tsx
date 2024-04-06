@@ -25,6 +25,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { MouseEvent as MouseEventReact } from "react";
 
 
 interface ICases {
@@ -39,6 +40,7 @@ interface ICases {
 type ICasesList = ICases[];
 
 export default function Cases() {
+    // state to toggle the border for the header
 
     const cases: ICasesList = [
         {
@@ -68,7 +70,7 @@ export default function Cases() {
             DonationCollected: 2884,
             DonationGoal: 13000,
             Cause: "Hostel Mess",
-            Action: ["Edit", "Resolve", "Close Case"],
+            Action: ["Edit", "Resolve", "Close"],
 
         },
         {
@@ -102,6 +104,15 @@ export default function Cases() {
 
         }
     ]
+    const handleHeaderState = (e: MouseEventReact<HTMLHeadingElement, MouseEvent>) => {
+        const caseHeader = e.target as HTMLElement;
+        const siblingHeaderId = caseHeader.id === "VERIFIED_CASES" ? "UNVERIFIED_CASES" : "VERIFIED_CASES";
+        const siblingHeader = document.getElementById(siblingHeaderId) as HTMLElement;
+        caseHeader.classList.add("border-b-4");
+        caseHeader.classList.remove("border-b-0");
+        siblingHeader.classList.remove("border-b-4");
+        siblingHeader.classList.add("border-b-0");
+    }
 
     return (
         <>
@@ -111,12 +122,12 @@ export default function Cases() {
                 <span className="text-sm text-primary opacity-75 ">24th March, 2024</span>
 
                 {/* Header for verified and unverified Cases */}
-                <div className="w-full px-4 py-2 bg-sky-100 rounded-xl flex gap-3 shadow-md shadow-slate-400">
-                    <div className="w-full py-2 text-center">
-                        <h1 className="cursor-pointer text-2xl font-bold text-primary border-b-4 border-blue-500">Verified Cases</h1>
+                <div className="w-full px-4 py-2 bg-sky-100 rounded-xl flex gap-3 shadow-md shadow-slate-400" >
+                    <div className="w-full ">
+                        <h1 id="VERIFIED_CASES" onClick={(e) => handleHeaderState(e)} className="transition-all duration-50 border-blue-500 w-full py-2 text-center cursor-pointer text-2xl font-bold text-primary  border-b-4">Verified Cases</h1>
                     </div>
-                    <div className="w-full py-2 text-center">
-                        <h1 className="cursor-pointer text-2xl font-bold text-primary">Unverified Cases</h1>
+                    <div className="w-full ">
+                        <h1 id="UNVERIFIED_CASES" onClick={(e) => handleHeaderState(e)} className="transition-all duration-50 border-blue-500 w-full py-2 text-center cursor-pointer text-2xl font-bold text-primary">Unverified Cases</h1>
                     </div>
                 </div>
 
@@ -185,11 +196,12 @@ export default function Cases() {
                         <TableCaption>List of cases ends here.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[150px]">Created Date</TableHead>
-                                <TableHead>Donation Collected</TableHead>
-                                <TableHead>Donation Goal</TableHead>
-                                <TableHead>Cause</TableHead>
-                                <TableHead className="text-end">Action</TableHead>
+                                {/* heach table header can be used as the sorting buttons */}
+                                <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Created Date</TableHead>
+                                <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Donation Collected</TableHead>
+                                <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Donation Goal</TableHead>
+                                <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Cause</TableHead>
+                                <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer text-end">Action</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -210,7 +222,7 @@ export default function Cases() {
                                                     <DropdownMenuSeparator />
                                                     {
                                                         verifiedc.Action.map((action, index) => (
-                                                            action === "Close Case" ?
+                                                            action === "Close" ?
                                                                 <DropdownMenuItem key={index} className="bg-red-100 rounded-lg">{action}</DropdownMenuItem>
                                                                 :
                                                                 <DropdownMenuItem key={index} className="rounded-lg">{action}</DropdownMenuItem>
