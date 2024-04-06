@@ -1,17 +1,20 @@
 import useLogin from '@/customHooks/useLogin';
 import './login.css';
-import { MouseEvent, useEffect } from 'react';
-import { TailSpin } from 'react-loader-spinner';
+import { MouseEvent, useEffect, useState } from 'react';
+import { Oval } from 'react-loader-spinner';
 
 function Login() {
     // Hooks
-    
+    const [wrongCredential, setWrongCredenial] = useState<boolean>(false);
     // Custom Hooks
     const login = useLogin();
 
     useEffect(() => {
         stopSpinner('login-spinner');
     }, [])
+
+
+    const wrongCredentialClass = wrongCredential ? 'text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md' : 'hidden';
     // handling form submissoin here
     const handleOnSubmit = async (e: MouseEvent)=> {
         e.preventDefault();
@@ -21,7 +24,8 @@ function Login() {
         req.subscribe({
             next: () => stopSpinner('login-spinner'),
             error: (err) => {
-                console.log(err);
+                if (err.status === 401) setWrongCredenial(true);
+                else console.error(err);
                 stopSpinner('login-spinner');
             }
         })
@@ -62,12 +66,19 @@ function Login() {
 
             {/* Login Form container */}
             <div className="relative w-full flex px-20 justify-center items-center">
+
+                {/* LOADING SPINNER */}
                 <div id='login-spinner' className='hidden absolute w-full h-full z-20 bg-black opacity-60'>
                     <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
-                        <TailSpin height={40} width={40} radius={1} visible={true}></TailSpin>
+                        <Oval height={40} width={40} visible={true}></Oval>
                     </div>
                 </div>
+
+
+                {/* HEADER CONTENT */}
                 <div className='flex flex-col gap-4 w-[400px] '>
+                    {/* INVALID CREDENTIAL */}
+                    <div className={wrongCredentialClass}>Invalid Email or Password.</div>
                     {/* /HEADER */}
                     <header className='flex flex-col gap-2'>
                         <h1 className='text-primary text-2xl font-bold'>Account Login</h1>
@@ -76,7 +87,6 @@ function Login() {
 
                     {/* FORM */}
                     <body>
-
                         <form className='relative flex flex-col gap-4'>
                             {/* email and password */}
                             <span className='flex flex-col gap-2'>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigate } from "react-router-dom";
-import { tap } from "rxjs";
+import { delay, tap } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { LoginUrl } from "@/environment/serverUrls";
 
@@ -19,18 +19,16 @@ function useLogin() {
         // get the values from the from
         const email = (document.getElementById('email') as HTMLInputElement).value;
         const password = (document.getElementById('password') as HTMLInputElement).value;
-        console.log({ email, password });
         // sending the post request using ajax of rxjs
         const req = ajax.post(LoginUrl, { email, password }, { 'Content-Type': 'application/json' })
             .pipe(
+                delay(300),
                 // tapping the response adn checking the response status
                 tap((res) => {
                     const response: ILoginResponseDto = res.response as ILoginResponseDto;
                     if (response.status) {
                         localStorage.setItem('token', response.token);
                         navigate('/dashboard');
-                    } else {
-                        alert(response.errors?.join('\n'));
                     }
                 })
             )
