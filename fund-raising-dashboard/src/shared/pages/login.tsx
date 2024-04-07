@@ -1,35 +1,60 @@
 import useLogin from '@/customHooks/useLogin';
 import './login.css';
-import { MouseEvent, useEffect, useState } from 'react';
 import { Oval } from 'react-loader-spinner';
+import { useForm, SubmitHandler } from "react-hook-form";
+import { ILoginRequestDto } from '@/models/DTOs/ILoginRequestDto';
+
+// defining the interface for the login Form
+
 
 function Login() {
-    // Hooks
-    const [wrongCredential, setWrongCredenial] = useState<boolean>(false);
+    // Form hooks
+    const {register, handleSubmit, formState: {isSubmitting, errors}, setError} = useForm<ILoginRequestDto>();
+
+
     // Custom Hooks
     const login = useLogin();
 
-    useEffect(() => {
-        stopSpinner('login-spinner');
-    }, [])
 
 
-    const wrongCredentialClass = wrongCredential ? 'text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md' : 'hidden';
-    // handling form submissoin here
-    const handleOnSubmit = async (e: MouseEvent)=> {
-        e.preventDefault();
-        // starting the loading spinner
-        startSpinner('login-spinner');
-        const req = await login();
-        req.subscribe({
+    // FUNCTIONS
+
+    // Function to submit the form
+    const onSubmit: SubmitHandler<ILoginRequestDto> = async (data) => {
+        try{
+            startSpinner('login-spinner');
+            // getting the request ready from the custom hook
+            const req = await login(data);
+
+            // req is observable so we will subscribe it to get the response
+            req.subscribe({
             next: () => stopSpinner('login-spinner'),
             error: (err) => {
-                if (err.status === 401) setWrongCredenial(true);
-                else console.error(err);
+                // cathcing unauthorized Error
+                if (err.status === 401) {
+                    setError('root', {
+                        message: "Invalid Email or Password"
+                    })
+                }
+                else {
+                    setError('root', {
+                        message: "Something went wrong, Please try again later."
+                    })
+                }
+                console.error(err);
                 stopSpinner('login-spinner');
             }
         })
+        }catch (err) {
+            console.error(err);
+            setError('root', {
+                message: "Something went wrong, Please try again later."
+            })
+        }
+        
     }
+
+
     return (
         // Container for my div
         // Dividing the screen into two divs 
@@ -77,8 +102,9 @@ function Login() {
 
                 {/* HEADER CONTENT */}
                 <div className='flex flex-col gap-4 w-[400px] '>
-                    {/* INVALID CREDENTIAL */}
-                    <div className={wrongCredentialClass}>Invalid Email or Password.</div>
+                    {/* VALIDATION ERRROS */}
+                    {/* CUSTOM ROOT ERRORS */}
+                    {errors.root && <div className='text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md'>{errors.root.message}</div>}
                     {/* /HEADER */}
                     <header className='flex flex-col gap-2'>
                         <h1 className='text-primary text-2xl font-bold'>Account Login</h1>
@@ -87,16 +113,41 @@ function Login() {
 
                     {/* FORM */}
                     <body>
-                        <form className='relative flex flex-col gap-4'>
+                        <form onSubmit={handleSubmit(onSubmit)} className='relative flex flex-col gap-4'>
                             {/* email and password */}
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="email" className='font-medium text-[#696F79]'>Email: </label>
-                                <input className='input-primary' id='email' type="email" placeholder='example@gmail.com' />
+                                <input
+                                {...register("email", {
+                                    required: "Email is required",
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                        message: "Invalid Email Address"
+                                    }
+                                })}
+                                className='input-primary'
+                                id='email'
+                                type="text"
+                                placeholder='example@gmail.com' 
+                                />
+                                {/* ERRORs */}
+                                {errors.email && <span className='text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md'>{errors.email.message}</span>}
                             </span>
 
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="password" className='font-medium text-[#696F79]'>Password</label>
-                                <input className='input-primary' id='password' type="password" placeholder='*********' />
+                                <input
+                                // We are logging in so no need to set pattern validations or minlength for password
+                                {...register("password", {
+                                    required: "Password is required",
+                                })}
+                                className='input-primary'
+                                id='password'
+                                type="password"
+                                placeholder='*********' 
+                                />
+                                {/* ERRORs */}
+                                {errors.password && <span className='text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md'>{errors.password.message}</span>}
                             </span>
 
                             {/* Remember me check box */}
@@ -106,7 +157,7 @@ function Login() {
                             </span>
 
                             {/* submit button */}
-                            <button onClick={(e) => handleOnSubmit(e)} type='submit' className='form-btn-primary'>Login</button>
+                            <button disabled={isSubmitting} type='submit' className='form-btn-primary'>{isSubmitting ? 'PLease wait': 'Login'}</button>
                         </form>
 
                     </body>

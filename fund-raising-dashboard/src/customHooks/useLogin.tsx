@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { delay, tap } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { LoginUrl } from "@/environment/serverUrls";
-
+import { ILoginRequestDto } from "@/models/DTOs/ILoginRequestDto";
 
 interface ILoginResponseDto {
     email: string;
@@ -12,17 +12,16 @@ interface ILoginResponseDto {
     errors?: string[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useLogin() {
     const navigate = useNavigate();
-    // stop the default refresh of the page
-    return async () => {
+    // stop the default refresh of the page`
+    return async (data: ILoginRequestDto) => {
         // get the values from the from
-        const email = (document.getElementById('email') as HTMLInputElement).value;
-        const password = (document.getElementById('password') as HTMLInputElement).value;
         // sending the post request using ajax of rxjs
-        const req = ajax.post(LoginUrl, { email, password }, { 'Content-Type': 'application/json' })
+        const req = ajax.post(LoginUrl, data, { 'Content-Type': 'application/json' })
             .pipe(
-                delay(300),
+                delay(200),
                 // tapping the response adn checking the response status
                 tap((res) => {
                     const response: ILoginResponseDto = res.response as ILoginResponseDto;
