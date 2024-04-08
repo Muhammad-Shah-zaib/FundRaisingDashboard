@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import './navbar.css';
 import {
     DropdownMenu,
@@ -9,21 +9,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-interface NavbarProps {
-    ToggleSideBarFn: (state: boolean) => void;
-}
-
-export default function Navbar({ ToggleSideBarFn }: NavbarProps) {
+export default function Navbar() {
     // Hooks
-    const href = useLocation();
     const navigate = useNavigate();
 
     // Dynamic classes
 
-    console.log(href);
-    if (href.pathname.includes(`Cases`) || href.pathname.includes(`Management-Team`)) {
-        ToggleSideBarFn(false);
-    }
+
     const handleLogOut = () => {
         if (confirm("Are you sure you want to log out?")) {
             localStorage.removeItem('token');
@@ -71,15 +63,15 @@ export default function Navbar({ ToggleSideBarFn }: NavbarProps) {
                 {/* container for the navbar */}
                 <div className="text-lg font-medium flex flex-col gap-1">
                     <span className="cursor-pointer transition-all duration-300  rounded-lg">
-                        <NavLink to={'/dashboard'} className={`w-full h-full py-2 pl-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100 `} onClick={() => ToggleSideBarFn(true)}>Dashboard</NavLink>
+                        <NavLink className={`w-full h-full py-2 pl-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100 `} to={'/dashboard'} >Dashboard</NavLink>
                     </span>
                     <span className="cursor-pointer transition-all duration-300  rounded-lg">
-                        <NavLink className={`w-full h-full pl-2 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(true)} to={'/causes-Bank'}>Causes & Bank</NavLink>
+                        <NavLink className={`w-full h-full pl-2 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} to={'/causes-Bank'}>Causes & Bank</NavLink>
                     </span>
                     <span className="cursor-pointer transition-all duration-300  rounded-lg">
-                        <NavLink className={`w-full h-full pl-2 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100 `} onClick={() => ToggleSideBarFn(false)} to={'/Cases'}>Cases</NavLink></span>
+                        <NavLink className={`w-full h-full pl-2 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100 `} to={'/Cases'}>Cases</NavLink></span>
                     <span className="cursor-pointer transition-all duration-300  rounded-lg">
-                        <NavLink className={`w-full h-full pl-2 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} onClick={() => ToggleSideBarFn(false)} to={'/Management-Team'}>Management Team</NavLink>
+                        <NavLink className={`w-full h-full pl-2 py-2 hover:bg-slate-800 rounded-lg block opacity-50 hover:opacity-100`} to={'/Management-Team'}>Management Team</NavLink>
                     </span>
 
                 </div>

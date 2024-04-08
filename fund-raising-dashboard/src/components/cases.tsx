@@ -117,12 +117,12 @@ export default function Cases() {
     return (
         <>
             {/* container */}
-            <div className="w-full h-full px-4 py-1 flex flex-col gap-4">
+            <div className="max-w-[1280px] h-full px-4 py-1 flex flex-col gap-4">
                 {/* Date goes here */}
                 <span className="text-sm text-primary opacity-75 ">24th March, 2024</span>
 
                 {/* Header for verified and unverified Cases */}
-                <div className="w-full px-4 py-2 bg-sky-100 rounded-xl flex gap-3 shadow-md shadow-slate-400" >
+                <div className="w-full px-4 py-2 bg-slate-50 flex gap-3 shadow-md shadow-slate-400" >
                     <div className="w-full ">
                         <h1 id="VERIFIED_CASES" onClick={(e) => handleHeaderState(e)} className="transition-all duration-50 border-blue-500 w-full py-2 text-center cursor-pointer text-2xl font-bold text-primary  border-b-4">Verified Cases</h1>
                     </div>
@@ -134,7 +134,7 @@ export default function Cases() {
 
                 <Sheet>
                     <SheetTrigger asChild>
-                        <div className="group flex justify-between items-center w-[50%] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-sm shadow-slate-300 ">
+                        <div className="group flex justify-between items-center max-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-sm shadow-slate-300 ">
                             <span className="font-bold text-primary text-2xl">
                                 Create New Case
                             </span>

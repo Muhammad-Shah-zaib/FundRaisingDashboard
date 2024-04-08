@@ -12,7 +12,7 @@ export function Dashboard() {
                 * Cause Bank
                 */}
                 <header className="flex w-full">
-                    <Link to={'/causes-bank'} className="hover:shadow-sm shadow-slate-400 transition-shadow duration-300 cursor-pointer w-full py-3 px-2 bg-sky-100 rounded-lg shadow-md flex flex-col gap-4">
+                    <Link to={'/causes-bank'} className="hover:shadow-md hover:bg-slate-100 shadow-slate-400 transition-shadow duration-300 cursor-pointer w-full py-3 px-2 shadow-md flex bg-slate-50 flex-col gap-4">
                         <h2 className="text-3xl font-bold opacity-60">Cause Bank:</h2>
                         <span className="text-4xl font-bold self-center">283,990 Rs</span>
                     </Link>

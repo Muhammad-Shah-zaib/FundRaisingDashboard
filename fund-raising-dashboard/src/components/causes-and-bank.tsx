@@ -32,7 +32,7 @@ export default function CausesAndBank() {
             <div className="h-full w-full flex flex-col gap-8 px-16 py-4">
                 {/* header */}
                 <header className="flex w-full">
-                    <div className="w-full py-3 px-2 bg-sky-100 rounded-lg shadow-md shadow-slate-400 cursor-default flex flex-col gap-4">
+                    <div className="w-full py-3 px-2 bg-slate-50 shadow-md shadow-slate-400 cursor-default flex flex-col gap-4">
                         <h2 className="text-3xl font-bold opacity-60">
                             Total Money in the Bank
                         </h2>
@@ -43,7 +43,7 @@ export default function CausesAndBank() {
                 {/* Create new Cause */}
                 <Sheet>
                     <SheetTrigger asChild>
-                        <div className="cursor-pointer group flex justify-between items-center w-full bg-slaate-50 hover:bg-slate-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-md shadow-slate-300 ">
+                        <div className="group cursor-pointer flex justify-between items-center w-full bg-slaate-50 hover:bg-slate-300 transition-all duration-300 py-2 px-4 shadow-md shadow-slate-300 ">
                             <span className="font-bold text-primary text-2xl">
                                 Create New Cause
                             </span>
@@ -51,7 +51,7 @@ export default function CausesAndBank() {
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="w-8 h-8 text-green-500  group-hover:text-green-700 transition-all duration-300 "
+                                className="w-8 h-8 text-green-500 group-hover:text-green-700 transition-all duration-300 "
                             >
                                 <path
                                     fillRule="evenodd"

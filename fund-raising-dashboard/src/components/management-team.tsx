@@ -81,7 +81,7 @@ export default function ManagementTeam() {
             FirstName: "John",
             LastName: "Wick",
             LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
+            Action: ["Edit", "Remove", "Close"],
 
         },
         {
@@ -145,20 +145,20 @@ export default function ManagementTeam() {
     return (
         <>
             {/* container */}
-            <div className="w-full h-full px-4 py-1 flex flex-col gap-4">
+            <div className="max-w-[1280px] h-full px-4 py-1 flex flex-col gap-4">
                 {/* Date goes here */}
-                <span className="text-sm text-primary opacity-75 ">24th March, 2024</span>
+                <span className="text-sm text-primary opacity-75">24th March, 2024</span>
 
                 {/* Header for verified and unverified Cases */}
                 <div className="flex gap-4">
-                    <div className="w-[50%] px-4 py-2 bg-sky-100 rounded-xl flex gap-3 shadow-md shadow-slate-400">
+                    <div className="w-[50%] px-4 py-2 bg-slate-50 flex gap-3 shadow-md shadow-slate-400">
                         <div className="w-full py-2 text-center">
                             <h1 className="cursor-pointer text-2xl font-bold text-primary border-b-4 border-blue-500">Management Team</h1>
                         </div>
                     </div>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <div id="sheet" onClick={() => ResetForm()} className="w-[50%] px-4 py-2 hover:bg-slate-200 transition-all duration-300 rounded-xl flex gap-3 shadow-md shadow-slate-400">
+                            <div id="sheet" onClick={() => ResetForm()} className="w-[50%] px-4 py-2 hover:bg-slate-200 transition-all duration-300 flex gap-3 shadow-md shadow-slate-400">
                                 <div className="w-full py-2 flex items-center justify-between px-4">
                                     <h1 className="cursor-pointer text-2xl font-bold text-primary">Add New User</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -303,7 +303,8 @@ export default function ManagementTeam() {
                                                                 :
                                                                 action === 'Edit' ?
                                                                     <DropdownMenuItem onClick={() => TriggerClick('sheet')} key={index} className="rounded-lg">{action}</DropdownMenuItem>
-                                                                    : null
+                                                                    :
+                                                                    <DropdownMenuItem key={index} className="rounded-lg">{action}</DropdownMenuItem>
                                                         ))
                                                     }
                                                 </DropdownMenuContent>

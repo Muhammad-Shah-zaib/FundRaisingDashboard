@@ -1,20 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../component/navbar";
 import SideInfoBar from "../component/side-Info-bar";
-import { useState } from "react";
 
+/*
+* This layout is for the dashboard 
+* and causes and bank pages
+*/
 export default function MasterLayout() {
-    // using state to toggle the side bar
-    const [showSideBar, setShowSideBar] = useState<boolean>(true);
-
-    // this function will toggle the side bar
-    const toggleSideBar = (state: boolean) => {
-        setShowSideBar(state);
-    }
-    const sideBarClass = showSideBar ? "col-span-4" : "hidden";
-    const wideMainComponentClass = showSideBar ? "col-span-8" : "col-span-12";
-
-
     return (
         <>
             {/* Container of the whole page */}
@@ -22,22 +14,22 @@ export default function MasterLayout() {
 
                 {/* Container for the nav Bar */}
                 <div className="col-span-2 h-full w-full">
-                    <Navbar ToggleSideBarFn={toggleSideBar}></Navbar>
+                    <Navbar></Navbar>
                 </div>
 
                 <div className={`col-span-10 h-full w-full bg-white grid grid-cols-12 rounded-lg overflow-hidden`}>
                     {/* Container for main component */}
-                    <div className={`${wideMainComponentClass} h-full w-full`}>
+                    <div className={`col-span-8 h-full w-full`}>
                         <Outlet></Outlet>
                     </div>
 
                     {/* Container for the side Info Bar */}
-                    <div className={`${sideBarClass} h-full w-full`}>
+                    <div className={`col-span-4 h-full w-full`}>
 
                         <SideInfoBar></SideInfoBar>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
