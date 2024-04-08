@@ -134,7 +134,7 @@ export default function Cases() {
 
                 <Sheet>
                     <SheetTrigger asChild>
-                        <div className="group flex justify-between items-center w-[50%] hover:bg-slate-300 hover:shadow-green-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-sm shadow-slate-300 ">
+                        <div className="group flex justify-between items-center w-[50%] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 rounded-lg shadow-sm shadow-slate-300 ">
                             <span className="font-bold text-primary text-2xl">
                                 Create New Case
                             </span>

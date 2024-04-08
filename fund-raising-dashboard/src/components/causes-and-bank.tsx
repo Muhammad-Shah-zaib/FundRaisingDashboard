@@ -6,8 +6,26 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Oval } from "react-loader-spinner";
+import { startSpinner, stopSpinner } from '@/utils/SpinnerFn';
 
+interface ICreateCause {
+    name: string;
+}
 export default function CausesAndBank() {
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<ICreateCause>();
+
+    const onSubmit: SubmitHandler<ICreateCause> = async (data) => {
+        startSpinner('causes-spinner');
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        setError('root', {
+            message: "Something went wrong, please try again later."
+        })
+        stopSpinner('causes-spinner');
+        console.log(data);
+    }
+
     return (
         <>
             {/* Container */}
@@ -43,21 +61,40 @@ export default function CausesAndBank() {
                             </svg>
                         </div>
                     </SheetTrigger>
-                    <SheetContent>
+                    <SheetContent className="realtive">
+                        {/* LOADING SPINNER */}
+                        <div id='causes-spinner' className='hidden absolute inset-0 w-full h-full z-20 bg-black opacity-60'>
+                            <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
+                                <Oval height={40} width={40} visible={true}></Oval>
+                            </div>
+                        </div>
                         <SheetHeader>
+                            {/* VALIDATION FOR ROOT ERRORS */}
+                            {errors.root && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.root.message}</span>}
                             <SheetTitle>Edit profile</SheetTitle>
                             <SheetDescription>
                                 Make changes to your profile here. Click save when you're done.
                             </SheetDescription>
                         </SheetHeader>
-                        <form className="flex flex-col gap-4 py-4">
+                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 py-4">
                             {/* First Name */}
                             <div className="grid items-center gap-3 grid-cols-3">
-                                <span><label htmlFor="causename" className="text-base font-medium text-primary cursor-pointer">Cause Name: </label></span>
-                                <input id="causename" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="John" />
+                                <span>
+                                    <label htmlFor="causename" className="text-base font-medium text-primary cursor-pointer">Cause Name: </label>
+                                </span>
+                                <input
+                                    {...register("name", {
+                                        required: "Cause Name is required"
+                                    })}
+                                    id="causename"
+                                    type="text"
+                                    className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="John"
+                                />
+                                {/* validation for NAME field */}
+                                {errors.name && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.name.message}</span>}
                             </div>
                             <div className="w-full">
-                                <button className="text-lg font-medium w-full text-center bg-slate-100 rounded-lg px-4 py-2 hover:bg-slate-300 transition-all duration-300 shadow-md shadow-slate-300">Create</button>
+                                <button disabled={isSubmitting} className="text-lg font-medium w-full text-center bg-slate-100 rounded-lg px-4 py-2 hover:bg-slate-300 transition-all duration-300 shadow-md shadow-slate-300">{isSubmitting ? 'Creating...' : 'Create'}</button>
                             </div>
 
                         </form>

@@ -25,6 +25,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Oval } from "react-loader-spinner";
+import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
 
 
 interface IUsers {
@@ -37,7 +40,26 @@ interface IUsers {
 }
 type IUsersList = IUsers[];
 
+interface IAddUser {
+    FirstName: string;
+    LastName: string;
+    Email: string;
+    Password: string;
+}
 export default function ManagementTeam() {
+    // Form Hooks
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<IAddUser>();
+
+    // Function to handle the form submission
+    const onSubmit: SubmitHandler<IAddUser> = async (data) => {
+        startSpinner("MT-spinner");
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        setError('root', {
+            message: "Something went wrong, Please try again later."
+        })
+        stopSpinner('MT-spinner');
+        console.log(data);
+    }
 
     const users: IUsersList = [
         {
@@ -142,35 +164,97 @@ export default function ManagementTeam() {
                                 </div>
                             </div>
                         </SheetTrigger>
-                        <SheetContent>
+                        <SheetContent className="realtive">
+                            {/* LOADING SPINNER */}
+                            <div id='MT-spinner' className='hidden absolute inset-0 w-full h-full z-20 bg-black opacity-60'>
+                                <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
+                                    <Oval height={40} width={40} visible={true}></Oval>
+                                </div>
+                            </div>
                             <SheetHeader>
+                                {/* ROOT ERRORS GOES HERE */}
+                                {errors.root && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.root.message}</span>}
                                 <SheetTitle>Edit profile</SheetTitle>
                                 <SheetDescription>
                                     Make changes to your profile here. Click save when you're done.
                                 </SheetDescription>
                             </SheetHeader>
-                            <form className="flex flex-col gap-2 py-4">
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 py-4">
                                 {/* First Name */}
                                 <div className="grid items-center gap-3 grid-cols-3">
-                                    <span><label htmlFor="firstname" className="text-base font-medium text-primary cursor-pointer">First Name: </label></span>
-                                    <input id="firstname" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="John" />
+                                    <span><label htmlFor="firstname" className="text-base font-medium text-primary cursor-pointer">First Name: <strong className="text-red-500">*</strong></label></span>
+                                    <input
+                                        {...register("FirstName", {
+                                            required: "First Name is required"
+                                        })}
+                                        id="firstname"
+                                        type="text"
+                                        className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium"
+                                        placeholder="John"
+                                    />
+                                    {/* Validation for firstname field */}
+                                    {errors.FirstName && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.FirstName.message}</span>}
                                 </div>
                                 {/* Last Name */}
                                 <div className="grid items-center gap-3 grid-cols-3">
                                     <span><label htmlFor="lastname" className="text-base font-medium text-primary cursor-pointer">Last Name: </label></span>
-                                    <input id="lastname" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="Wick" />
+                                    <input
+                                        {...register("LastName")}
+                                        id="lastname"
+                                        type="text"
+                                        className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium"
+                                        placeholder="Wick"
+                                    />
                                 </div>
                                 {/* Email */}
                                 <div className="grid items-center gap-3 grid-cols-3">
-                                    <span><label htmlFor="email" className="text-base font-medium text-primary cursor-pointer">Email: </label></span>
-                                    <input id="email" type="text" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="example@gmail.com" />
+                                    <span>
+                                        <label htmlFor="email" className="text-base font-medium text-primary cursor-pointer">Email: <strong className="text-red-500">*</strong></label>
+                                    </span>
+                                    <input
+                                        {...register("Email", {
+                                            required: "Email is required",
+                                            pattern: {
+                                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                                message: "Invalid Email Address"
+                                            }
+                                        })}
+                                        id="email"
+                                        type="text"
+                                        className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium"
+                                        placeholder="example@gmail.com"
+                                    />
+                                    {/* Validation for email field */}
+                                    {errors.Email && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.Email.message}</span>}
                                 </div>
                                 {/* Password */}
                                 <div className="grid items-center gap-3 grid-cols-3">
-                                    <span><label htmlFor="password" className="text-base font-medium text-primary cursor-pointer">Password: </label></span>
-                                    <input id="password" type="password" className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="********" />
+                                    <span>
+                                        <label htmlFor="password" className="text-base font-medium text-primary cursor-pointer">Password: <strong className="text-red-500">*</strong></label>
+                                    </span>
+                                    <input
+                                        {...register("Password", {
+                                            required: "Password is required",
+                                            minLength: {
+                                                value: 8,
+                                                message: "Password must be at least 8 characters long"
+                                            },
+                                            pattern: {
+                                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                                message: "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
+                                            }
+                                        })}
+                                        id="password"
+                                        type="password"
+                                        className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="********"
+                                    />
+                                    {/* Validation for password field */}
+                                    {errors.Password && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.Password.message}</span>}
                                 </div>
 
+                                <div>
+                                    <button disabled={isSubmitting} className="text-lg font-medium w-full text-center bg-slate-100 rounded-lg px-4 py-2 hover:bg-slate-300 transition-all duration-300 shadow-md shadow-slate-300">{isSubmitting ? 'Adding...' : 'Add user'}</button>
+                                </div>
                             </form>
                             <SheetFooter>
                                 <SheetClose asChild>
