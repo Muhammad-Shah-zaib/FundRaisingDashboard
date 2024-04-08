@@ -28,6 +28,7 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
 import Spinner from "@/shared/component/Spinner";
+import TriggerClick from "@/utils/TriggerClick";
 
 
 interface IUsers {
@@ -48,7 +49,7 @@ interface IAddUser {
 }
 export default function ManagementTeam() {
     // Form Hooks
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<IAddUser>();
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError, reset } = useForm<IAddUser>();
 
     // Function to handle the form submission
     const onSubmit: SubmitHandler<IAddUser> = async (data) => {
@@ -59,6 +60,9 @@ export default function ManagementTeam() {
         })
         stopSpinner('MT-spinner');
         console.log(data);
+    }
+    const ResetForm: () => void = () => {
+        reset();
     }
 
     const users: IUsersList = [
@@ -154,7 +158,7 @@ export default function ManagementTeam() {
                     </div>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <div className="w-[50%] px-4 py-2 hover:bg-slate-200 transition-all duration-300 rounded-xl flex gap-3 shadow-md shadow-slate-400">
+                            <div id="sheet" onClick={() => ResetForm()} className="w-[50%] px-4 py-2 hover:bg-slate-200 transition-all duration-300 rounded-xl flex gap-3 shadow-md shadow-slate-400">
                                 <div className="w-full py-2 flex items-center justify-between px-4">
                                     <h1 className="cursor-pointer text-2xl font-bold text-primary">Add New User</h1>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -262,7 +266,7 @@ export default function ManagementTeam() {
 
 
                 {/* Table goes here */}
-                <div className="h-[70vh] w-[70vw] overflow-auto ">
+                <div className="h-[70vh] overflow-auto ">
                     <Table>
                         <TableCaption>List of cases ends.</TableCaption>
                         <TableHeader>
@@ -297,7 +301,9 @@ export default function ManagementTeam() {
                                                             action === "Remove" ?
                                                                 <DropdownMenuItem key={index} className="bg-red-100 rounded-lg">{action}</DropdownMenuItem>
                                                                 :
-                                                                <DropdownMenuItem key={index} className="rounded-lg">{action}</DropdownMenuItem>
+                                                                action === 'Edit' ?
+                                                                    <DropdownMenuItem onClick={() => TriggerClick('sheet')} key={index} className="rounded-lg">{action}</DropdownMenuItem>
+                                                                    : null
                                                         ))
                                                     }
                                                 </DropdownMenuContent>

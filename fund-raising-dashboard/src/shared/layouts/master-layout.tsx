@@ -21,11 +21,11 @@ export default function MasterLayout() {
             <div className="h-[100vh] w-[100vw] grid grid-cols-12 bg-[#101010] p-4">
 
                 {/* Container for the nav Bar */}
-                <div className="col-span-3 h-full w-full">
+                <div className="col-span-2 h-full w-full">
                     <Navbar ToggleSideBarFn={toggleSideBar}></Navbar>
                 </div>
 
-                <div className={`col-span-9 h-full w-full bg-white grid grid-cols-12 rounded-lg overflow-hidden`}>
+                <div className={`col-span-10 h-full w-full bg-white grid grid-cols-12 rounded-lg overflow-hidden`}>
                     {/* Container for main component */}
                     <div className={`${wideMainComponentClass} h-full w-full`}>
                         <Outlet></Outlet>
