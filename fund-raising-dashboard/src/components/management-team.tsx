@@ -26,8 +26,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Oval } from "react-loader-spinner";
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
+import Spinner from "@/shared/component/Spinner";
 
 
 interface IUsers {
@@ -166,11 +166,7 @@ export default function ManagementTeam() {
                         </SheetTrigger>
                         <SheetContent className="realtive">
                             {/* LOADING SPINNER */}
-                            <div id='MT-spinner' className='hidden absolute inset-0 w-full h-full z-20 bg-black opacity-60'>
-                                <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
-                                    <Oval height={40} width={40} visible={true}></Oval>
-                                </div>
-                            </div>
+                            <Spinner id='MT-spinner'></Spinner>
                             <SheetHeader>
                                 {/* ROOT ERRORS GOES HERE */}
                                 {errors.root && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.root.message}</span>}

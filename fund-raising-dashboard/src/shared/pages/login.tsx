@@ -1,16 +1,16 @@
 import useLogin from '@/customHooks/useLogin';
 import './login.css';
-import { Oval } from 'react-loader-spinner';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ILoginRequestDto } from '@/models/DTOs/ILoginRequestDto';
 import { imgXlinkHref } from './LoginImgXlinkHref';
 import { startSpinner, stopSpinner } from '@/utils/SpinnerFn';
+import Spinner from '../component/Spinner';
 
 // defining the interface for the login Form
 
 function Login() {
     // Form hooks
-    const {register, handleSubmit, formState: {isSubmitting, errors}, setError} = useForm<ILoginRequestDto>();
+    const { register, handleSubmit, formState: { isSubmitting, errors }, setError } = useForm<ILoginRequestDto>();
 
 
     // Custom Hooks
@@ -22,37 +22,37 @@ function Login() {
 
     // Function to submit the form
     const onSubmit: SubmitHandler<ILoginRequestDto> = async (data) => {
-        try{
+        try {
             startSpinner('login-spinner');
             // getting the request ready from the custom hook
             const req = await login(data);
 
             // req is observable so we will subscribe it to get the response
             req.subscribe({
-            next: () => stopSpinner('login-spinner'),
-            error: (err) => {
-                // cathcing unauthorized Error
-                if (err.status === 401) {
-                    setError('root', {
-                        message: "Invalid Email or Password"
-                    })
+                next: () => stopSpinner('login-spinner'),
+                error: (err) => {
+                    // cathcing unauthorized Error
+                    if (err.status === 401) {
+                        setError('root', {
+                            message: "Invalid Email or Password"
+                        })
+                    }
+                    else {
+                        setError('root', {
+                            message: "Something went wrong, Please try again later."
+                        })
+                    }
+                    console.error(err);
+                    stopSpinner('login-spinner');
                 }
-                else {
-                    setError('root', {
-                        message: "Something went wrong, Please try again later."
-                    })
-                }
-                console.error(err);
-                stopSpinner('login-spinner');
-            }
-        })
-        }catch (err) {
+            })
+        } catch (err) {
             console.error(err);
             setError('root', {
                 message: "Something went wrong, Please try again later."
             })
         }
-        
+
     }
 
 
@@ -94,11 +94,7 @@ function Login() {
             <div className="relative w-full flex px-20 justify-center items-center">
 
                 {/* LOADING SPINNER */}
-                <div id='login-spinner' className='hidden absolute w-full h-full z-20 bg-black opacity-60'>
-                    <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
-                        <Oval height={40} width={40} visible={true}></Oval>
-                    </div>
-                </div>
+                <Spinner id='login-spinner'></Spinner>
 
 
                 {/* HEADER CONTENT */}
@@ -119,17 +115,17 @@ function Login() {
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="email" className='font-medium text-[#696F79]'>Email: </label>
                                 <input
-                                {...register("email", {
-                                    required: "Email is required",
-                                    pattern: {
-                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                        message: "Invalid Email Address"
-                                    }
-                                })}
-                                className='input-primary'
-                                id='email'
-                                type="text"
-                                placeholder='example@gmail.com' 
+                                    {...register("email", {
+                                        required: "Email is required",
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                            message: "Invalid Email Address"
+                                        }
+                                    })}
+                                    className='input-primary'
+                                    id='email'
+                                    type="text"
+                                    placeholder='example@gmail.com'
                                 />
                                 {/* ERRORs */}
                                 {errors.email && <span className='text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md'>{errors.email.message}</span>}
@@ -138,14 +134,14 @@ function Login() {
                             <span className='flex flex-col gap-2'>
                                 <label htmlFor="password" className='font-medium text-[#696F79]'>Password</label>
                                 <input
-                                // We are logging in so no need to set pattern validations or minlength for password
-                                {...register("password", {
-                                    required: "Password is required",
-                                })}
-                                className='input-primary'
-                                id='password'
-                                type="password"
-                                placeholder='*********' 
+                                    // We are logging in so no need to set pattern validations or minlength for password
+                                    {...register("password", {
+                                        required: "Password is required",
+                                    })}
+                                    className='input-primary'
+                                    id='password'
+                                    type="password"
+                                    placeholder='*********'
                                 />
                                 {/* ERRORs */}
                                 {errors.password && <span className='text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md'>{errors.password.message}</span>}
@@ -158,7 +154,7 @@ function Login() {
                             </span>
 
                             {/* submit button */}
-                            <button disabled={isSubmitting} type='submit' className='form-btn-primary'>{isSubmitting ? 'PLease wait': 'Login'}</button>
+                            <button disabled={isSubmitting} type='submit' className='form-btn-primary'>{isSubmitting ? 'PLease wait' : 'Login'}</button>
                         </form>
 
                     </body>

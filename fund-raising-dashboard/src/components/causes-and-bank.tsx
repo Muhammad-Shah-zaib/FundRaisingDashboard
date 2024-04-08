@@ -7,8 +7,8 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Oval } from "react-loader-spinner";
 import { startSpinner, stopSpinner } from '@/utils/SpinnerFn';
+import Spinner from "@/shared/component/Spinner";
 
 interface ICreateCause {
     name: string;
@@ -63,11 +63,7 @@ export default function CausesAndBank() {
                     </SheetTrigger>
                     <SheetContent className="realtive">
                         {/* LOADING SPINNER */}
-                        <div id='causes-spinner' className='hidden absolute inset-0 w-full h-full z-20 bg-black opacity-60'>
-                            <div className='h-[40px] w-[40px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30'>
-                                <Oval height={40} width={40} visible={true}></Oval>
-                            </div>
-                        </div>
+                        <Spinner id="causes-spinner"></Spinner>
                         <SheetHeader>
                             {/* VALIDATION FOR ROOT ERRORS */}
                             {errors.root && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.root.message}</span>}
