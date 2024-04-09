@@ -27,7 +27,7 @@ interface SpinnerProps {
 function Spinner({ id, height, width }: SpinnerProps) {
     return (
         <div id={id} className='hidden absolute inset-0 w-full h-full z-20 bg-black opacity-60'>
-            <div className={`h-[${height ? height : '40'}px] w-[${width ? width : '40'}px] absolute inset-[50%] translate-x-[-50%] translate-y-[-50%] z-30`}>
+            <div className={`h-full w-full flex items-center justify-center absolute inset-0  z-30`}>
                 <Oval height={height ? height : 40} width={width ? width : 40} visible={true}></Oval>
             </div>
         </div>
