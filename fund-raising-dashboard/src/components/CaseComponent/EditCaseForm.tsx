@@ -1,0 +1,100 @@
+import { SubmitHandler, useForm } from "react-hook-form";
+import "./CaseForm.css";
+import ICaseRequestDto from "@/models/DTOs/CaseRequestDto";
+import { getAllCases$, updateCase$ } from "@/Services/CaseService";
+import { CaseList } from "@/models/DTOs/CasesResponseDto";
+import { toast } from "sonner";
+import TriggerClick from "@/utils/TriggerClick";
+
+interface IEditCaseFormProps {
+    caseId: number;
+    setCasesStateFn: (c: CaseList) => void;
+}
+
+function EditCaseForm({ caseId, setCasesStateFn }: IEditCaseFormProps) {
+    const { register, setValue, handleSubmit, formState: { errors, isSubmitting } } = useForm<ICaseRequestDto>({
+        defaultValues: {
+            title: "",
+            description: "",
+            causeName: "MESS_FEE"
+        }
+    });
+    const updateCase = (data: ICaseRequestDto) => {
+        // updating the case
+        const case$ = updateCase$(caseId, data);
+        case$.subscribe({
+            next: (res) => {
+                res.response && console.log(res.response);
+                // since the case is updated we will get the updated cases
+                const cases$ = getAllCases$();
+                cases$.subscribe({
+                    next: (res: CaseList) => {
+                        setCasesStateFn(res);
+                        toast.success("Success", {
+                            description: "Case updated Successfully!",
+                            action: {
+                                label: "Show Cases",
+                                onClick: () => { TriggerClick("dialog-close-btn") }
+                            }
+                        });
+                    },
+                    error: (err) => console.error(err)
+                })
+            }
+        })
+
+    }
+
+    const onSubmit: SubmitHandler<ICaseRequestDto> = (data) => {
+        console.log(data);
+        updateCase(data);
+    }
+    return (
+        <form className='flex flex-col gap-4 text-slate-900'>
+            {/* TITLE */}
+            <div className="flex flex-col gap-1">
+                <div className="grid grid-cols-3 items-center">
+                    <label htmlFor="Title" className="text-lg font-medium">Title:</label>
+                    <input {...register("title", {
+                        required: "Title is required"
+                    })} type="text" id="Title" className="col-span-2 font-bold focus:border-blue-700 case-primary-input" />
+                </div>
+                {errors.title && <div className="col-span-3 text-sm w-full px-4 py-2 font-black bg-red-200 text-red-800 rounded-lg">{errors.title.message}</div>}
+            </div>
+
+            {/* Cause Name */}
+            <div className="flex">
+                <select onChange={(e) => setValue("causeName", e.target.value)} name="cause" id="cause" className="SELECT-ARROW outline-none focus:border-blue-700 text-lg font-bold font-mono w-full px-4 py-2 rounded-lg border-2 border-slate-400">
+                    <option value="MESS_FEE">Mess Fee</option>
+                    <option value="HOSTEL_FEE">Hostel Fee</option>
+                    <option value="TUITION_FEE">Tuition Fee</option>
+                </select>
+            </div>
+
+            {/* Description */}
+            <div>
+                <textarea
+                    {...register("description", {
+                        required: "Description is required"
+                    })}
+                    title="Write a description here."
+                    name="description"
+                    id="description"
+                    cols={100}
+                    rows={8}
+                    placeholder="Description"
+                    className="px-4 py-2 border-2 outline-sky-700 border-slate-400 rounded-lg w-full font-bold font-mono text-lg"
+                >
+                </textarea>
+                {errors.description && <div className="text-sm w-full px-4 py-2 font-black bg-red-300 text-red-900 rounded-lg">{errors.description.message}</div>}
+            </div>
+
+            {/* SUBMIT BUTTON */}
+            <div className="flex justify-end">
+                <button onClick={handleSubmit(onSubmit)} disabled={isSubmitting} className="text-lg font-bold text-yellow-700 font-mono px-8 py-2 shadow-md shadow-slate-300 hover:bg-yellow-100 transition-all duration-300">Update</button>
+            </div>
+        </form>
+    )
+}
+
+export default EditCaseForm

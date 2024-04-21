@@ -10,3 +10,5 @@ export const getALLCasesUrl: string = `${casesUrl}/GetAllCases`;
 export const addCaseUrl: string = `${casesUrl}/AddCase`;
 // thd delete case url should be like this: `${casesUrl}/DeleteCase/${id}`
 export const deleteCaseUrl: string = `${casesUrl}/DeleteCase/`;
+// the update case url should be like this: `${casesUrl}/UpdateCase/${id}`
+export const updateCaseUrl: string = `${casesUrl}/UpdateCase/`;

@@ -31,7 +31,8 @@ export default function Navbar() {
                 {/* little bit of profile details */}
                 <div className="flex flex-col gap-3">
                     {/* image */}
-                    <div className="ml-2 h-[60px] w-[60px] bg-blue-500 rounded-lg">
+                    <div className="ml-2 h-[60px] w-[60px] bg-blue-500 rounded-lg overflow-hidden">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP1RwTUt6ve7LIsabWDQRnJQ_sLKgmh4gyOjWkUPzj2A&s" className="w-[60px] h-[60px]" />
                     </div>
 
                     <div className="flex flex-col">

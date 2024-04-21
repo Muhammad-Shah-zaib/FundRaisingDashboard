@@ -70,7 +70,7 @@ export default function Cases() {
 
                 <Sheet>
                     <SheetTrigger asChild>
-                        <div className="group flex justify-between items-center max-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-sm shadow-slate-300 ">
+                        <div id="new-case-sheet" className="group flex justify-between items-center max-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-sm shadow-slate-300 ">
 
                             <span className="font-bold text-primary text-2xl">
                                 Create New Case
@@ -93,9 +93,9 @@ export default function Cases() {
                     <SheetContent>
                         <Spinner id="CaseFormSpinner"></Spinner>
                         <SheetHeader>
-                            <SheetTitle>Edit profile</SheetTitle>
+                            <SheetTitle>Create or Update Case</SheetTitle>
                             <SheetDescription>
-                                Make changes to your profile here. Click save when you're done.
+                                Provide the following details to create a new case.
                             </SheetDescription>
                         </SheetHeader>
                         {/* FORM TO ADD NEW CASE */}

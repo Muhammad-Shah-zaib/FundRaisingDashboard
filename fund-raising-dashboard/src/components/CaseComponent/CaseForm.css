@@ -1,0 +1,3 @@
+.case-primary-input{
+    @apply text-base border-2 rounded-lg border-slate-400 px-4 py-1 outline-none shadow-sm shadow-slate-300;
+}

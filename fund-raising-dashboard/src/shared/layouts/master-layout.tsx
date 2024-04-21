@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../component/navbar";
 import SideInfoBar from "../component/side-Info-bar";
-
 /*
 * This layout is for the dashboard 
 * and causes and bank pages

@@ -8,6 +8,15 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
+import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -18,31 +27,41 @@ import {
 import { CaseList } from '@/models/DTOs/CasesResponseDto';
 import Spinner from '@/shared/component/Spinner';
 import { deleteCaseAsync } from "@/Services/CaseService";
-import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
+import EditCaseForm from "./EditCaseForm";
+import { toast } from "sonner";
 
 interface ICaseTableProps {
     cases: CaseList
-    setCaseFn?: (cases: CaseList) => void
+    setCaseFn: (cases: CaseList) => void
 }
 
 function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
 
     const deleteCase = (id: number) => {
-        startSpinner("CasesTableSpinner");
         console.log("Deleting" + id);
         const deletedCase$ = deleteCaseAsync(id);
         deletedCase$.subscribe({
             next: (res) => {
-                stopSpinner("CasesTableSpinner");
                 console.log(res.response);
                 setCaseFn && setCaseFn(cases.filter(c => c.caseId !== id));
+                toast.success("Case Resolved Successfully!");
             },
             error: (err) => {
-                stopSpinner("CasesTableSpinner");
                 console.error(err);
+                toast.error("Case Resolved Failed!", {
+                    description: err.message,
+                    action: {
+                        label: "Retry",
+                        onClick: () => deleteCase(id)
+                    }
+                });
             }
         })
     }
+
+
+
+
 
     return (
         <div className="h-[60vh] overflow-auto relative">
@@ -76,8 +95,23 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                             <DropdownMenuLabel>Case</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem onClick={() => console.log(c.caseId)} className="rounded-lg">Verify Case Case</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => console.log(c.caseId)} className="rounded-lg">Edit Case</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => deleteCase(c.caseId)} className="bg-red-100 rounded-lg">Resolve Case</DropdownMenuItem>
+                                            <Dialog>
+                                                <DialogTrigger className="w-full">
+                                                    <div className="rounded-lg text-sm text-start px-2 py-1 hover:bg-slate-100 w-full my-1">Edit Case</div>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Edit Case: #{c.caseId}</DialogTitle>
+                                                        <DialogDescription>
+                                                            <EditCaseForm caseId={c.caseId} setCasesStateFn={setCaseFn}></EditCaseForm>
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                </DialogContent>
+                                            </Dialog>
+
+                                            <div>
+                                                <button onClick={() => deleteCase(c.caseId)} className="bg-red-50 rounded-lg hover:bg-red-200 text-red-800 transition-all duration-300 px-2 py-1 m-1 w-full text-start font-bold text-base">Resolve Case</button>
+                                            </div>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -86,7 +120,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                     }
                 </TableBody>
             </Table>
-        </div>
+        </div >
     )
 }
 

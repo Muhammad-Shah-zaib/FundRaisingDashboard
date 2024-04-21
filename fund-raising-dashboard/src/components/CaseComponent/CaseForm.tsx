@@ -42,7 +42,7 @@ function CaseForm() {
                     <option value="TUITION_FEE">Tuition Fee</option>
                 </select>
             </div>
-            {/* DESCRIPTION */}
+            {/* DESIPTION */}
             <div>
                 <textarea
                     {...register("description", { required: "Description is required" })}
