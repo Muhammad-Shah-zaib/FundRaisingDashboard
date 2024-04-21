@@ -29,6 +29,7 @@ import Spinner from '@/shared/component/Spinner';
 import { deleteCaseAsync } from "@/Services/CaseService";
 import EditCaseForm from "./EditCaseForm";
 import { toast } from "sonner";
+import TriggerClick from "@/utils/TriggerClick";
 
 interface ICaseTableProps {
     cases: CaseList
@@ -44,12 +45,13 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
             next: (res) => {
                 console.log(res.response);
                 setCaseFn && setCaseFn(cases.filter(c => c.caseId !== id));
+                TriggerClick("dialog-close-btn");
                 toast.success("Case Resolved Successfully!");
             },
             error: (err) => {
                 console.error(err);
+                TriggerClick("dialog-close-btn");
                 toast.error("Case Resolved Failed!", {
-                    description: err.message,
                     action: {
                         label: "Retry",
                         onClick: () => deleteCase(id)
@@ -94,6 +96,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                         <DropdownMenuContent>
                                             <DropdownMenuLabel>Case</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
+                                            {/* VERIFY CASE */}
                                             <DropdownMenuItem onClick={() => console.log(c.caseId)} className="rounded-lg">Verify Case Case</DropdownMenuItem>
                                             <Dialog>
                                                 <DialogTrigger className="w-full">
@@ -101,16 +104,44 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                                 </DialogTrigger>
                                                 <DialogContent>
                                                     <DialogHeader>
+                                                        {/* EDIT CASE */}
                                                         <DialogTitle>Edit Case: #{c.caseId}</DialogTitle>
                                                         <DialogDescription>
-                                                            <EditCaseForm caseId={c.caseId} setCasesStateFn={setCaseFn}></EditCaseForm>
+                                                            <EditCaseForm existingCase={c} caseId={c.caseId} setCasesStateFn={setCaseFn}></EditCaseForm>
                                                         </DialogDescription>
                                                     </DialogHeader>
                                                 </DialogContent>
                                             </Dialog>
-
+                                            {/* DELETE CASE */}
                                             <div>
-                                                <button onClick={() => deleteCase(c.caseId)} className="bg-red-50 rounded-lg hover:bg-red-200 text-red-800 transition-all duration-300 px-2 py-1 m-1 w-full text-start font-bold text-base">Resolve Case</button>
+                                                <Dialog>
+                                                    <DialogTrigger>
+                                                        <button className="bg-red-50 rounded-lg hover:bg-red-200 text-red-800 transition-all duration-300 px-2 py-1 m-1 w-full text-start font-bold text-base">Resolve Case</button>
+                                                    </DialogTrigger>
+                                                    {/* CONFIRMING FROM USER TO DELETE THE CASE OR NOT */}
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                            <DialogDescription>
+                                                                <div>
+                                                                    <p>
+                                                                        This action cannot be undone. This will permanently case and remove the data from the server.
+                                                                    </p>
+
+                                                                    <div className="flex gap-4 justify-end">
+                                                                        <button onClick={() => TriggerClick("dialog-close-btn")} className="bg-slate-50 text-black font-medium shadow-md shadow-slate-400 border hover:border-sky-700 rounded-lg px-4 py-2 hover:bg-slate-100 transition-all duration-300 hover:border">Cancle</button>
+                                                                        <button onClick={() => {
+                                                                            deleteCase(c.caseId);
+                                                                        }} className="bg-red-200 text-red-800 hover:bg-red-300 transition-all duration-300 font-bold shadow-md shadow-slate-400 rounded-lg px-4 py-2">Delete</button>
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                    </DialogContent>
+                                                </Dialog>
                                             </div>
                                         </DropdownMenuContent>
                                     </DropdownMenu>

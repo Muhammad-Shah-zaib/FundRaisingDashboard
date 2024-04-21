@@ -10,6 +10,9 @@ export default {
   ],
   prefix: "",
   theme: {
+    zIndex: {
+      '200': '200',
+    },
     container: {
       center: true,
       padding: "2rem",

@@ -1,9 +1,7 @@
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -99,12 +97,7 @@ export default function Cases() {
                             </SheetDescription>
                         </SheetHeader>
                         {/* FORM TO ADD NEW CASE */}
-                        <CaseForm></CaseForm>
-
-                        <SheetFooter>
-                            <SheetClose asChild>
-                            </SheetClose>
-                        </SheetFooter>
+                        <CaseForm setCasesStateFn={setCases}></CaseForm>
                     </SheetContent>
                 </Sheet>
 

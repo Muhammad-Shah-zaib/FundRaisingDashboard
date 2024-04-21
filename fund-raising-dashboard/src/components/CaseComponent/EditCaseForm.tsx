@@ -2,21 +2,22 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import "./CaseForm.css";
 import ICaseRequestDto from "@/models/DTOs/CaseRequestDto";
 import { getAllCases$, updateCase$ } from "@/Services/CaseService";
-import { CaseList } from "@/models/DTOs/CasesResponseDto";
+import { Case, CaseList } from "@/models/DTOs/CasesResponseDto";
 import { toast } from "sonner";
 import TriggerClick from "@/utils/TriggerClick";
 
 interface IEditCaseFormProps {
     caseId: number;
+    existingCase: Case;
     setCasesStateFn: (c: CaseList) => void;
 }
 
-function EditCaseForm({ caseId, setCasesStateFn }: IEditCaseFormProps) {
+function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormProps) {
     const { register, setValue, handleSubmit, formState: { errors, isSubmitting } } = useForm<ICaseRequestDto>({
         defaultValues: {
-            title: "",
-            description: "",
-            causeName: "MESS_FEE"
+            title: existingCase.title,
+            description: existingCase.description,
+            causeName: existingCase.causeName
         }
     });
     const updateCase = (data: ICaseRequestDto) => {
@@ -57,7 +58,10 @@ function EditCaseForm({ caseId, setCasesStateFn }: IEditCaseFormProps) {
                     <label htmlFor="Title" className="text-lg font-medium">Title:</label>
                     <input {...register("title", {
                         required: "Title is required"
-                    })} type="text" id="Title" className="col-span-2 font-bold focus:border-blue-700 case-primary-input" />
+                    })}
+                        type="text"
+                        id="Title"
+                        className="col-span-2 font-bold focus:border-blue-700 case-primary-input" />
                 </div>
                 {errors.title && <div className="col-span-3 text-sm w-full px-4 py-2 font-black bg-red-200 text-red-800 rounded-lg">{errors.title.message}</div>}
             </div>

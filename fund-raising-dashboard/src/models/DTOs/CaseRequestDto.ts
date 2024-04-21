@@ -3,3 +3,5 @@ export default interface ICaseRequestDto {
     description: string;
     causeName: string;
 }
+
+export interface CaseDto extends ICaseRequestDto {}
