@@ -23,10 +23,11 @@ interface SpinnerProps {
     id: string;
     height?: number;
     width?: number;
+    BgClass?: string;
 }
-function Spinner({ id, height, width }: SpinnerProps) {
+function Spinner({ id, height, width, BgClass = "bg-black" }: SpinnerProps) {
     return (
-        <div id={id} className='hidden absolute inset-0 w-full h-full z-20 bg-black opacity-60'>
+        <div id={id} className={`hidden absolute inset-0 w-full h-full z-20 opacity-60 ${BgClass}`}>
             <div className={`h-full w-full flex items-center justify-center absolute inset-0  z-30`}>
                 <Oval height={height ? height : 40} width={width ? width : 40} visible={true}></Oval>
             </div>
