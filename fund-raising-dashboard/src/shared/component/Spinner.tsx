@@ -2,10 +2,16 @@ import { Oval } from "react-loader-spinner";
 
 /*
 * This component is used to show the spinner 
-* on the screen 
+* on the screen
 
 * you can use it when fetching 
-* data or making asynchroneous calls
+* data or making asynchronous calls
+
+* To use this you have to make a parent div
+* with relative positive position and it
+* this Spinner will produce a spinner
+* to the center of it and a bg overlay
+* over the whole parent div
 
 ? @param id: string
 * the id can be used to start and stop the spinner 
