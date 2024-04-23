@@ -6,5 +6,6 @@ export interface Case {
     description: string
     createdDate: string
     causeName: string
+    verifiedStatus: boolean;
     causeId: number
 }

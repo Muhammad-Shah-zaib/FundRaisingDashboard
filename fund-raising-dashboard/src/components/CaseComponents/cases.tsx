@@ -14,7 +14,7 @@ export default function Cases() {
     const [casesState, setCases] = useState<CaseList>([]);
 // this function fetch all the cases
     // the sign '$' represent that this function uses the rxjs Observables
-    const fetchCases$ = () => {
+    const fetchCases$ = async () => {
         const cases$ = getAllCases$();
         cases$.subscribe({
             next: (cases) => {

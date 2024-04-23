@@ -12,3 +12,5 @@ export const addCaseUrl: string = `${casesUrl}/AddCase`;
 export const deleteCaseUrl: string = `${casesUrl}/DeleteCase/`;
 // the update case url should be like this: `${casesUrl}/UpdateCase/${id}`
 export const updateCaseUrl: string = `${casesUrl}/UpdateCase/`;
+// the verifyCaseUrl should be like this: `${caseUrl}/VerifyCase/${id}`
+export const verifyCaseUrl: string = `${casesUrl}/VerifyCase`;

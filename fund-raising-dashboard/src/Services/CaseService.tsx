@@ -1,4 +1,4 @@
-import { addCaseUrl, deleteCaseUrl, getALLCasesUrl, updateCaseUrl } from "@/environment/serverUrls";
+import {addCaseUrl, deleteCaseUrl, getALLCasesUrl, updateCaseUrl, verifyCaseUrl} from "@/environment/serverUrls";
 import ICaseRequestDto from "@/models/DTOs/CaseRequestDto";
 import { CaseList } from "@/models/DTOs/CasesResponseDto";
 import { delay, tap } from "rxjs";
@@ -12,6 +12,9 @@ export const addCaseAsync = (data: ICaseRequestDto) => {
                 if (res.status === 403) throw new Error("UnAutorized");
             }),
         )
+}
+export const verifyCase$ = (id: number) => {
+    return ajax.put(`${verifyCaseUrl}/${id}`);
 }
 
 export const deleteCaseAsync = (id: number) => {

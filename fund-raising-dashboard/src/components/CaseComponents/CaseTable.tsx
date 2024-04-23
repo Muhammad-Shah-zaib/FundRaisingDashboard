@@ -30,6 +30,7 @@ import { deleteCaseAsync } from "@/Services/CaseService";
 import EditCaseForm from "./EditCaseForm";
 import { toast } from "sonner";
 import TriggerClick from "@/utils/TriggerClick";
+import { verifyCase$ } from "@/Services/CaseService";
 
 interface ICaseTableProps {
     cases: CaseList
@@ -37,6 +38,15 @@ interface ICaseTableProps {
 }
 
 function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
+
+    const verifyCase = (id: number) => {
+        console.log("Verifying case# " + id);
+        const verifiedCase$ = verifyCase$(id);
+
+        verifiedCase$.subscribe({
+            next: (res) => console.log(res)
+        })
+    }
 
     const deleteCase = (id: number) => {
         console.log("Deleting" + id);
@@ -72,9 +82,10 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                 <TableCaption>List of cases ends here.</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        {/* heach table header can be used as the sorting buttons */}
-                        <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Title</TableHead>
+                        {/* each table header can be used as the sorting buttons */}
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Case Id</TableHead>
+                        <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Title</TableHead>
+                        <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Verified Status</TableHead>
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Created Date</TableHead>
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Cause</TableHead>
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer text-end">Action</TableHead>
@@ -84,8 +95,9 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                     {
                         cases.map(c => (
                             <TableRow key={c.caseId}>
+                                <TableCell className={"font-bold"}>#{c.caseId}</TableCell>
                                 <TableCell className="font-medium">{c.title}</TableCell>
-                                <TableCell>{c.caseId}</TableCell>
+                                <TableCell>{c.verifiedStatus ? "Verified": "Un-Verified"}</TableCell>
                                 <TableCell>{c.createdDate}</TableCell>
                                 <TableCell>{c.causeName}</TableCell>
                                 <TableCell className="text-end">
@@ -97,7 +109,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                             <DropdownMenuLabel>Case</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
                                             {/* VERIFY CASE */}
-                                            <DropdownMenuItem onClick={() => console.log(c.caseId)} className="rounded-lg">Verify Case Case</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => verifyCase(c.caseId)} className="rounded-lg">Verify Case Case</DropdownMenuItem>
                                             <Dialog>
                                                 <DialogTrigger className="w-full">
                                                     <div className="rounded-lg text-sm text-start px-2 py-1 hover:bg-slate-100 w-full my-1">Edit Case</div>
