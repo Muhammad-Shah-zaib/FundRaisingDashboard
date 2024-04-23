@@ -10,11 +10,12 @@ import {toast} from "sonner";
 
 
 export default function Cases() {
-    // Form Hooks
+    // HOOKs
     const [casesState, setCases] = useState<CaseList>([]);
-// this function fetch all the cases
+
+    // this function fetch all the cases
     // the sign '$' represent that this function uses the rxjs Observables
-    const fetchCases$ = async () => {
+    const fetchCases$ = () => {
         const cases$ = getAllCases$();
         cases$.subscribe({
             next: (cases) => {

@@ -1,7 +1,7 @@
 import './App.css'
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
 import MasterLayout from './shared/layouts/master-layout'
-import { Dashboard } from '../src/components/dashboard'
+import { Dashboard } from '@/components/dashboard.tsx'
 import CausesAndBank from './components/causes-and-bank'
 import Cases from '@/components/CaseComponents/cases'
 import ManagementTeam from './components/management-team'

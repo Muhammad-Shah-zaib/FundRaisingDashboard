@@ -1,4 +1,11 @@
-import {addCaseUrl, deleteCaseUrl, getALLCasesUrl, updateCaseUrl, verifyCaseUrl} from "@/environment/serverUrls";
+import {
+    addCaseUrl,
+    deleteCaseUrl,
+    getALLCasesUrl,
+    unVerifyCaseUrl,
+    updateCaseUrl,
+    verifyCaseUrl
+} from "@/environment/serverUrls";
 import ICaseRequestDto from "@/models/DTOs/CaseRequestDto";
 import { CaseList } from "@/models/DTOs/CasesResponseDto";
 import { delay, tap } from "rxjs";
@@ -9,20 +16,18 @@ export const addCaseAsync = (data: ICaseRequestDto) => {
         .pipe(
             delay(200),
             tap((res) => {
-                if (res.status === 403) throw new Error("UnAutorized");
+                if (res.status === 403) throw new Error("Un-Authorized");
             }),
         )
 }
-export const verifyCase$ = (id: number) => {
-    return ajax.put(`${verifyCaseUrl}/${id}`);
-}
+
 
 export const deleteCaseAsync = (id: number) => {
     return ajax.delete(deleteCaseUrl + id)
         .pipe(
             delay(200),
             tap((res) => {
-                if (res.status === 403) throw new Error("UnAutorized");
+                if (res.status === 403) throw new Error("Un-Authorized");
             }),
 
         );
@@ -44,3 +49,23 @@ export const getAllCases$ = () => {
             delay(200),
         );
 }
+export const verifyCase$ = (id: number) => {
+    return ajax.put(`${verifyCaseUrl}/${id}`)
+        .pipe(
+            tap(res => {
+                if (res.status === 403) throw new Error("UnAuthorized access");
+            })
+        );
+}
+export const unVerifyCase$ = (id: number) => {
+    return ajax.put(`${unVerifyCaseUrl}/${id}`)
+        .pipe(
+            tap( res => {
+                if (res.status === 403) throw new Error("UnAuthorized access");
+            })
+        );
+}
+
+
+
+
