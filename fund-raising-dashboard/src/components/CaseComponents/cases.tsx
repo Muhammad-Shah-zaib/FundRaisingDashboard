@@ -25,12 +25,20 @@ export default function Cases() {
             error: (err) => {
                 console.error(err);
                 stopSpinner("CasesTableSpinner");
-                toast.error("Failed to fetch cases", {
+                if (err.status === 500) toast.error("Internal server Error",{
+                    description: "Server is under development. Please try again later."
+                });
+                else if (err.status === 404) toast.error("Server Not Found.", {
+                    description: "Check your Network and Try again."
+                });
+                toast.error("Something went wrong.", {
+                    description: "Check your Network and Try again.",
                     action: {
                         label: "Retry",
                         onClick: () => fetchCases$()
                     }
                 });
+
             }
         })
     }
