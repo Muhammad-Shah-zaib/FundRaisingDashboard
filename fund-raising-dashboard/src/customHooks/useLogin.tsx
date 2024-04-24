@@ -17,9 +17,9 @@ function useLogin() {
     const navigate = useNavigate();
     // stop the default refresh of the page`
     return async (data: ILoginRequestDto) => {
-        // get the values from the from
+        // get the values from the fetch
         // sending the post request using ajax of rxjs
-        const req = ajax.post(LoginUrl, data, { 'Content-Type': 'application/json' })
+        return ajax.post(LoginUrl, data, { 'Content-Type': 'application/json' })
             .pipe(
                 delay(200),
                 // tapping the response adn checking the response status
@@ -32,9 +32,7 @@ function useLogin() {
                 })
             )
 
-        return req;
     }
-
 }
 
 export default useLogin
