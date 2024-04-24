@@ -11,7 +11,7 @@ import React from 'react';
 interface IDialogProps {
     TriggerNode: React.ReactNode;
     children: React.ReactNode;
-    title: string;
+    title: React.ReactNode;
     titleClass?: string
 }
 

@@ -7,5 +7,4 @@ export interface Case {
     createdDate: string
     causeName: string
     verifiedStatus: boolean;
-    causeId: number
 }

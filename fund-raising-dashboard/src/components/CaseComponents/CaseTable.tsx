@@ -25,6 +25,7 @@ import {toast} from "sonner";
 import TriggerClick from "@/utils/TriggerClick";
 import {verifyCase$} from "@/Services/CaseService";
 import {startSpinner, stopSpinner} from "@/utils/SpinnerFn.ts";
+import ShowSingleCase from "@/components/CaseComponents/ShowSingleCase.tsx";
 
 interface ICaseTableProps {
     cases: CaseList
@@ -170,6 +171,10 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
                                         <DropdownMenuContent>
                                             <DropdownMenuLabel>Case</DropdownMenuLabel>
                                             <DropdownMenuSeparator/>
+                                            {/* SHOW CASE */}
+                                                <ShowSingleCase {...c}>
+                                                        <button className={`text-sm px-2 py-1.5 rounded-lg hover:bg-slate-100 text-start w-full`}>Show Case</button>
+                                                </ShowSingleCase>
                                             {/* VERIFY CASE */}
                                             {c.verifiedStatus ?
                                                 <DropdownMenuItem onClick={() => unVerifyCase(c.caseId)}
