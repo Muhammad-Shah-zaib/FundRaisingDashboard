@@ -12,19 +12,18 @@ import Dialog from "@/shared/component/Dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {CaseList} from '@/models/DTOs/CasesResponseDto';
+import { CaseList } from '@/models/DTOs/CasesResponseDto';
 import Spinner from '@/shared/component/Spinner';
-import {deleteCaseAsync, getAllCases$, unVerifyCase$} from "@/Services/CaseService";
+import { deleteCaseAsync, getAllCases$, unVerifyCase$ } from "@/Services/CaseService";
 import EditCaseForm from "./EditCaseForm";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import TriggerClick from "@/utils/TriggerClick";
-import {verifyCase$} from "@/Services/CaseService";
-import {startSpinner, stopSpinner} from "@/utils/SpinnerFn.ts";
+import { verifyCase$ } from "@/Services/CaseService";
+import { startSpinner, stopSpinner } from "@/utils/SpinnerFn.ts";
 import ShowSingleCase from "@/components/CaseComponents/ShowSingleCase.tsx";
 
 interface ICaseTableProps {
@@ -32,8 +31,9 @@ interface ICaseTableProps {
     setCaseFn: (cases: CaseList) => void
 }
 
-function CaseTable({cases, setCaseFn}: ICaseTableProps) {
+function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
     const unVerifyCase = (id: number) => {
+        TriggerClick("dialog-close-btn");
         startSpinner("CasesTableSpinner");
         const unVerifiedCase = unVerifyCase$(id);
 
@@ -68,6 +68,7 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
     }
 
     const verifyCase = (id: number) => {
+        TriggerClick("dialog-close-btn");
         startSpinner("CasesTableSpinner");
         const verifiedCase$ = verifyCase$(id);
 
@@ -76,8 +77,6 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
                 if (res.status === 200) {
                     setCaseFn([]);
                     console.log(res);
-                    // since the caseList is now updated, so we need to fetch the cases again
-                    // start the spinner we made for caseTable... IMPLEMENT THIS LATER
                     const cases$ = getAllCases$();
                     cases$.subscribe({
                         next: (res) => {
@@ -147,15 +146,30 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
                             <TableRow key={c.caseId}>
                                 <TableCell className={"font-bold"}>#{c.caseId}</TableCell>
                                 <TableCell className="font-medium">{c.title}</TableCell>
-                                <TableCell className={"flex gap-2"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                         className={`w-6 h-6 ${c.verifiedStatus ? 'text-green-400' : 'text-gray-400'}`}>
-                                        <path fillRule="evenodd"
-                                              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                              clipRule="evenodd"/>
-                                    </svg>
-                                    {c.verifiedStatus ? "Verified" : "Un-Verified"}
-
+                                <TableCell>
+                                    <Dialog
+                                        TriggerNode={
+                                            <button className="flex gap-2 items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                    className={`w-6 h-6 ${c.verifiedStatus ? 'text-green-400' : 'text-gray-400'}`}>
+                                                    <path fillRule="evenodd"
+                                                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                                        clipRule="evenodd" />
+                                                </svg>
+                                                {c.verifiedStatus ? "Verified" : "Un-Verified"}
+                                            </button>
+                                        }
+                                        title={`Case# ${c.caseId}`}
+                                    >
+                                        <div className="flex flex-col gap-1">
+                                            <p>Are you sure? You can undo this action later.</p>
+                                            <div className="flex justify-end">
+                                                <button onClick={
+                                                    c.verifiedStatus ? () => unVerifyCase(c.caseId) : () => verifyCase(c.caseId)
+                                                } className="px-4 py-2 border-2 border-slate-400 outline-none rounded-lg bg-slate-100 text-slate-950 opacity-80 font-mono font-black hover:border-blue-700 transition-border duration-300">{c.verifiedStatus ? "Un-Verify case" : "Verify Case"}</button>
+                                            </div>
+                                        </div>
+                                    </Dialog>
 
                                 </TableCell>
                                 <TableCell>{c.createdDate}</TableCell>
@@ -170,20 +184,31 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <DropdownMenuLabel>Case</DropdownMenuLabel>
-                                            <DropdownMenuSeparator/>
+                                            <DropdownMenuSeparator />
                                             {/* SHOW CASE */}
-                                                <ShowSingleCase {...c}>
-                                                        <button className={`text-sm px-2 py-1.5 rounded-lg hover:bg-slate-100 text-start w-full`}>Show Case</button>
-                                                </ShowSingleCase>
+                                            <ShowSingleCase {...c}>
+                                                <button className={`text-sm px-2 py-1.5 rounded-lg hover:bg-slate-100 text-start w-full`}>Show Case</button>
+                                            </ShowSingleCase>
                                             {/* VERIFY CASE */}
-                                            {c.verifiedStatus ?
-                                                <DropdownMenuItem onClick={() => unVerifyCase(c.caseId)}
-                                                                  className="rounded-lg">Un-Verify
-                                                    case</DropdownMenuItem>
-                                                :
-                                                <DropdownMenuItem onClick={() => verifyCase(c.caseId)}
-                                                                  className="rounded-lg">Verify case</DropdownMenuItem>
-                                            }
+                                            <div>
+                                                <Dialog
+                                                    TriggerNode={
+                                                        <button
+                                                            className="px-2 py-1.5 hover:bg-slate-100 text-sm rounded-lg w-full h-full text-start">{c.verifiedStatus ? "Un-Verify case" : "Verify Case"}</button>
+                                                    }
+                                                    title={`Case# ${c.caseId}`}
+                                                >
+                                                    <div className="flex flex-col gap-1">
+                                                        <p>Are you sure? You can undo this action later.</p>
+                                                        <div className="flex justify-end">
+                                                            <button onClick={
+                                                                c.verifiedStatus ? () => unVerifyCase(c.caseId) : () => verifyCase(c.caseId)
+                                                            } className="px-4 py-2 border-2 border-slate-400 outline-none rounded-lg bg-slate-100 text-slate-950 opacity-80 font-mono font-black hover:border-blue-700 transition-border duration-300">{c.verifiedStatus ? "Un-Verify case" : "Verify Case"}</button>
+                                                        </div>
+                                                    </div>
+                                                </Dialog>
+                                            </div>
+
                                             <Dialog
                                                 TriggerNode={
                                                     <div
@@ -195,7 +220,7 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
 
 
                                                 <EditCaseForm existingCase={c} caseId={c.caseId}
-                                                              setCasesStateFn={setCaseFn}></EditCaseForm>
+                                                    setCasesStateFn={setCaseFn}></EditCaseForm>
 
                                             </Dialog>
                                             {/* DELETE CASE */}
@@ -218,12 +243,12 @@ function CaseTable({cases, setCaseFn}: ICaseTableProps) {
 
                                                         <div className="flex gap-4 justify-end">
                                                             <button onClick={() => TriggerClick("dialog-close-btn")}
-                                                                    className="bg-slate-50 text-black font-medium shadow-md shadow-slate-400 border hover:border-sky-700 rounded-lg px-4 py-2 hover:bg-slate-100 transition-all duration-300 hover:border">Cancel
+                                                                className="bg-slate-50 text-black font-medium shadow-md shadow-slate-400 border hover:border-sky-700 rounded-lg px-4 py-2 hover:bg-slate-100 transition-all duration-300 hover:border">Cancel
                                                             </button>
                                                             <button onClick={() => {
                                                                 deleteCase(c.caseId);
                                                             }}
-                                                                    className="bg-red-200 text-red-800 hover:bg-red-300 transition-all duration-300 font-bold shadow-md shadow-slate-400 rounded-lg px-4 py-2">Delete
+                                                                className="bg-red-200 text-red-800 hover:bg-red-300 transition-all duration-300 font-bold shadow-md shadow-slate-400 rounded-lg px-4 py-2">Delete
                                                             </button>
                                                         </div>
 

@@ -8,38 +8,15 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { SubmitHandler, useForm } from "react-hook-form";
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
 import Spinner from "@/shared/component/Spinner";
-import TriggerClick from "@/utils/TriggerClick";
+import { IUserResponseDtoList } from "@/models/DTOs/IUserResponseDto.ts";
+import { useLayoutEffect, useState } from "react";
+import useUserService from "@/customHooks/useUserService";
+import ManagementTeamTable from "@/components/Mangement-Team/mangementTeamTable.tsx";
 
 
-interface IUsers {
-    UserId: number;
-    RegisteredDate: string;
-    FirstName: string;
-    LastName: string;
-    LastLogin: string;
-    Action: string[];
-}
-type IUsersList = IUsers[];
 
 interface IAddUser {
     FirstName: string;
@@ -48,6 +25,9 @@ interface IAddUser {
     Password: string;
 }
 export default function ManagementTeam() {
+    // Instantiations
+    const GetAllUsers = useUserService();
+
     // Form Hooks
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError, reset } = useForm<IAddUser>();
 
@@ -65,89 +45,21 @@ export default function ManagementTeam() {
         reset();
     }
 
-    const users: IUsersList = [
-        {
-            UserId: 1001,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit", "Remove"],
+    const [userListState, setUsersState] = useState<IUserResponseDtoList>([]);
 
-        },
-        {
-            UserId: 1002,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit", "Remove", "Close"],
-
-        },
-        {
-            UserId: 1003,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
-
-        },
-        {
-            UserId: 1004,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
-
-        },
-        {
-            UserId: 1005,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
-
-        },
-        {
-            UserId: 1006,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
-
-        },
-        {
-            UserId: 1007,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
-
-        },
-        {
-            UserId: 1008,
-            RegisteredDate: "2024-03-24",
-            FirstName: "John",
-            LastName: "Wick",
-            LastLogin: "2024-01-24",
-            Action: ["Edit Case", "Resolve Case", "Close Case"],
-
-        },
+    useLayoutEffect(() => {
+        GetAllUsers(setUsersState);
+    }, [])
 
 
-    ]
 
     return (
         <>
             {/* container */}
             <div className="max-w-[1280px] h-full px-4 py-1 flex flex-col gap-4">
                 {/* Date goes here */}
-                <span className="text-sm text-primary opacity-75">24th March, 2024</span>
+                <span className={`text-sm font-mono font-bold opacity-70`}>2024-03-24</span>
+                <span className="text-sm text-primary opacity-75"></span>
 
                 {/* Header for verified and unverified Cases */}
                 <div className="flex gap-4">
@@ -266,56 +178,7 @@ export default function ManagementTeam() {
 
 
                 {/* Table goes here */}
-                <div className="h-[70vh] overflow-auto ">
-                    <Table>
-                        <TableCaption>List of cases ends.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[150px]">User Id</TableHead>
-                                <TableHead>Registered Date</TableHead>
-                                <TableHead>First Name</TableHead>
-                                <TableHead>Last Name</TableHead>
-                                <TableHead>Last Login</TableHead>
-                                <TableHead>Action</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {
-                                users.map(u => (
-                                    <TableRow key={u.UserId}>
-                                        <TableCell className="font-medium">{u.UserId}</TableCell>
-                                        <TableCell>{u.RegisteredDate}</TableCell>
-                                        <TableCell>{u.FirstName}</TableCell>
-                                        <TableCell>{u.LastName}</TableCell>
-                                        <TableCell>{u.LastLogin}</TableCell>
-                                        <TableCell className="text-end">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger>
-                                                    <button className="px-4 py-2 outline-none hover:bg-slate-300 transition-all duration-300 rounded-lg shadow-md shadow-slate-300 tracking-wide font-black"> . . . </button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    <DropdownMenuLabel>User</DropdownMenuLabel>
-                                                    <DropdownMenuSeparator />
-                                                    {
-                                                        u.Action.map((action, index) => (
-                                                            action === "Remove" ?
-                                                                <DropdownMenuItem key={index} className="bg-red-100 rounded-lg">{action}</DropdownMenuItem>
-                                                                :
-                                                                action === 'Edit' ?
-                                                                    <DropdownMenuItem onClick={() => TriggerClick('sheet')} key={index} className="rounded-lg">{action}</DropdownMenuItem>
-                                                                    :
-                                                                    <DropdownMenuItem key={index} className="rounded-lg">{action}</DropdownMenuItem>
-                                                        ))
-                                                    }
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            }
-                        </TableBody>
-                    </Table>
-                </div>
+                <ManagementTeamTable userListState={userListState}></ManagementTeamTable>
             </div >
         </>
     )

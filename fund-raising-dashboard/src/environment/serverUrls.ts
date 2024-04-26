@@ -3,6 +3,11 @@ export const serverUrl: string = 'http://localhost:5036';
 // * ------------------ AUTH -------------------
 export const LoginUrl: string = `${serverUrl}/Login`;
 
+// * ------------------ USERS -------------------
+export const UsersUrl: string = `${serverUrl}/User`;
+
+export const GetAllUserUrl: string = `${UsersUrl}/GetAllUsers`;
+
 // * ------------------ CASES -------------------
 export const casesUrl: string = `${serverUrl}/Cases`;
 
