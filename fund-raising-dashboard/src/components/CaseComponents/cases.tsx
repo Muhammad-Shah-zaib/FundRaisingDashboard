@@ -81,14 +81,19 @@ export default function Cases() {
                 </div>
 
                 {/* USING MY OWN REUSABLE SHEET COMPONENT */}
-                <Sheet
-                    TriggerNode={<TriggerNode/>}
-                    Spinner={<Spinner id={"CaseFormSpinner"}></Spinner>}
-                    title={"Create or Update Case"}
-                    description={"Provide the following details to create a new case."}
-                >
-                    <CaseForm setCasesStateFn={setCases}></CaseForm>
-                </Sheet>
+                <div className={`grid grid-cols-3 items-center`}>
+                    <Sheet
+                        TriggerNode={
+                            <TriggerNode/>
+                        }
+                        Spinner={<Spinner id={"CaseFormSpinner"}></Spinner>}
+                        title={"Create or Update Case"}
+                        description={"Provide the following details to create a new case."}
+                    >
+                        <CaseForm setCasesStateFn={setCases}></CaseForm>
+                    </Sheet>
+                </div>
+
 
 
                 {/* Table goes here */}
@@ -101,24 +106,25 @@ export default function Cases() {
 // THIS IS THE TRIGGER NODE FOR MY CUSTOM SHEET COMPONENT
 const TriggerNode = () => {
     return (
-        <div id="new-case-sheet"
-             className="group flex gap-4 justify-between items-center lg:min-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-sm shadow-slate-300 ">
+            <div id="new-case-sheet"
+                 className="w-full group flex gap-4 justify-between items-center lg:min-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-sm shadow-slate-300 ">
 
             <span className="font-bold text-primary text-2xl">
                     Create New Case
             </span>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-8 h-8 text-green-500  group-hover:text-green-700 transition-all duration-300 "
-            >
-                <path
-                    fillRule="evenodd"
-                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
-                    clipRule="evenodd"
-                />
-            </svg>
-        </div>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-8 h-8 text-green-500  group-hover:text-green-700 transition-all duration-300 "
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+                        clipRule="evenodd"
+                    />
+                </svg>
+            </div>
+
     )
 }

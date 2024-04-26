@@ -44,8 +44,10 @@ export default function Sheet ({TriggerNode, Spinner, title, titleClass, descrip
     return (
         <div>
             <ShadCnSheet>
-                <SheetTrigger>
-                    {TriggerNode ? TriggerNode : <button>OPEN</button>}
+                <SheetTrigger asChild>
+                    <div className={`w-full`}>
+                        {TriggerNode ? TriggerNode : <button>OPEN</button>}
+                    </div>
                 </SheetTrigger>
 
                 <SheetContent>

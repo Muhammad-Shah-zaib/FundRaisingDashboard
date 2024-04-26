@@ -24,7 +24,7 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
         const addCase$ = addCaseAsync(data);
         addCase$.subscribe({
             next: () => {
-                // Since new case is added so we need to update the state
+                // Since new case is added, so we need to update the state
                 const cases$ = getAllCases$();
                 cases$.subscribe({
                     next: (res) => {
