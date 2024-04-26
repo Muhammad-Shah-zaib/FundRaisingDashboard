@@ -6,6 +6,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 import {IUserResponseDtoList} from "@/models/DTOs/IUserResponseDto.ts";
+import Spinner from "@/shared/component/Spinner.tsx";
 
 
 export interface IManagementTeamTable {
@@ -14,7 +15,8 @@ export interface IManagementTeamTable {
 export default function ManagementTeamTable({userListState}: IManagementTeamTable): JSX.Element{
     return (
         <>
-            <div className="h-[70vh] overflow-auto ">
+            <div className="h-[70vh] overflow-auto relative">
+                <Spinner id={"management-team-table-spinner"} BgClass={`bg-transparent`}></Spinner>
                 <Table>
                     <TableCaption>List of users end.</TableCaption>
 

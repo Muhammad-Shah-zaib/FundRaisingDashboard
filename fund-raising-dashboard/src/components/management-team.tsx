@@ -48,7 +48,8 @@ export default function ManagementTeam() {
     const [userListState, setUsersState] = useState<IUserResponseDtoList>([]);
 
     useLayoutEffect(() => {
-        GetAllUsers(setUsersState);
+        startSpinner("management-team-table-spinner");
+        GetAllUsers(setUsersState, "management-team-table-spinner");
     }, [])
 
 
