@@ -45,7 +45,7 @@ export default function ManagementTeam() {
 
 
                 {/* Table goes here */}
-                <ManagementTeamTable userListState={userListState}></ManagementTeamTable>
+                <ManagementTeamTable setUserState={setUsersState} userListState={userListState}></ManagementTeamTable>
             </div >
         </>
     )

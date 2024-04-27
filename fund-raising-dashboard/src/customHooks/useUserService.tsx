@@ -3,11 +3,13 @@ import UserService from "@/Services/UserService.ts"
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn.ts";
 import { toast } from "sonner";
 import { IRegistrationRequestDto } from "@/models/DTOs/RegistrationRequest.ts";
+import TriggerClick from "@/utils/TriggerClick";
 
 export type TGetAllUsersFn = (setUserState: (userList: IUserResponseDtoList) => void, spinnerId?: string) => void;
 export type TRegisterUserFn = (setUserState: (userList: IUserResponseDtoList) => void, data: IRegistrationRequestDto, spinnerId?: string) => void;
+export type TDeleteUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, spinnerId?: string, dialogSpinner?: string) => void;
 
-export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn] {
+export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDeleteUserFn] {
     // instantiating the UserService class
     const _userService = new UserService();
 
@@ -16,7 +18,7 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn] {
     // TO GET ALL THE USERs
     const GetAllUsers: TGetAllUsersFn = (setUserState: (userList: IUserResponseDtoList) => void, spinnerId?: string) => {
         const users$ = _userService.GetAllUsers$();
-
+        setUserState([]);
         users$.subscribe((res) => {
             setUserState(res);
             spinnerId && stopSpinner(spinnerId);
@@ -61,5 +63,25 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn] {
             spinnerId && stopSpinner(spinnerId);
         });
     }
-    return [GetAllUsers, RegisterUser];
+
+    const DeleteUser: TDeleteUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, spinnerId?: string, dialogSpinner?: string) => {
+        dialogSpinner && startSpinner(dialogSpinner);
+        const deleteUser$ = _userService.DeleteUser$(userId);
+
+        deleteUser$.subscribe((res) => {
+            if (res.status === 200) {
+                TriggerClick('dialog-close-btn');
+                toast.success("User has been deleted successfully", {
+                    description: "If the user list is not updated you can reload it to get the updated list"
+                });
+                GetAllUsers(setUserState, spinnerId);
+            }
+            dialogSpinner && stopSpinner(dialogSpinner);
+        }, (err) => {
+            console.error(err);
+            toast.error("User deletion failed");
+            dialogSpinner && stopSpinner(dialogSpinner);
+        });
+    }
+    return [GetAllUsers, RegisterUser, DeleteUser];
 }

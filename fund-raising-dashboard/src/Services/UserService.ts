@@ -1,6 +1,6 @@
 import { IUserResponseDtoList } from "@/models/DTOs/IUserResponseDto.ts";
 import {ajax, AjaxResponse} from "rxjs/ajax";
-import {GetAllUserUrl, RegistrationUrl} from "@/environment/serverUrls.ts";
+import {GetAllUserUrl, RegistrationUrl, DeleteUserUrl} from "@/environment/serverUrls.ts";
 import {delay, Observable, tap} from "rxjs";
 import RegistrationResponseDto from "@/models/DTOs/RegistrationResponseDto.ts";
 import {IRegistrationRequestDto} from "@/models/DTOs/RegistrationRequest.ts";
@@ -22,5 +22,16 @@ export default class UserService {
                     if (res.status === 403) throw new Error("Un-Authorized access");
                 })
             );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public DeleteUser$(userId: number): Observable<AjaxResponse<any>>{
+        return ajax.delete(DeleteUserUrl + userId)
+        .pipe(
+            delay(200),
+            tap(res => {
+                if (res.status === 403) throw new Error("Un-Authorized access");
+            })
+        );
     }
 }

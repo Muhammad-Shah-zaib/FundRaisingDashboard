@@ -7,12 +7,23 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { IUserResponseDtoList } from "@/models/DTOs/IUserResponseDto.ts";
 import Spinner from "@/shared/component/Spinner.tsx";
+import useUserService from "@/customHooks/useUserService";
+import Dialog from "@/shared/component/Dialog";
+import TriggerClick from "@/utils/TriggerClick";
 
 
 export interface IManagementTeamTable {
     userListState: IUserResponseDtoList
+    setUserState: (userList: IUserResponseDtoList) => void
 }
-export default function ManagementTeamTable({ userListState }: IManagementTeamTable): JSX.Element {
+export default function ManagementTeamTable({ userListState, setUserState }: IManagementTeamTable): JSX.Element {
+
+    const DeletUser = useUserService()[2];
+
+    const handleDeleteUser = (userId: number) => {
+        DeletUser(setUserState, userId, "management-team-table-spinner", 'dialog-spinner');
+    }
+
     return (
         <>
             <div className="h-[70vh] overflow-auto relative">
@@ -39,9 +50,16 @@ export default function ManagementTeamTable({ userListState }: IManagementTeamTa
                                 <TableCell>{u.firstName}</TableCell>
                                 <TableCell>{u.lastName}</TableCell>
                                 <TableCell>{u.email}</TableCell>
-                                <TableCell>
-                                    {new Date(u.userAuthLogsList.filter(l => l.eventType === "Registration")[0].eventTimestamp).toISOString().split('T')[0]}
-                                </TableCell>
+                                {/* REGISTRATION TIMESTAMP */}
+                                {(u.userAuthLogsList.filter(l => l.eventType === "Registration").length > 0) ?
+                                    <TableCell>
+                                        {new Date(u.userAuthLogsList.filter(l => l.eventType === "Registration")[0].eventTimestamp).toISOString().split('T')[0]}
+                                    </TableCell>
+                                    :
+                                    <TableCell className="text-red-500 text-sm font-medium">No Data found</TableCell>
+                                }
+
+                                {/* LAST LOGIN TIMESTAMP */}
                                 {(u.userAuthLogsList.filter(l => l.eventType === "Last_Login").length > 0) ?
                                     <TableCell>{new Date(u.userAuthLogsList.filter(l => l.eventType === "Last_Login")[0].eventTimestamp).toISOString().split('T')[0]}</TableCell>
                                     :
@@ -61,9 +79,25 @@ export default function ManagementTeamTable({ userListState }: IManagementTeamTa
                                             <DropdownMenuItem className={`rounded-lg`}>
                                                 Edit User
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className={`bg-red-100 rounded-lg`}>
-                                                Remove user
-                                            </DropdownMenuItem>
+                                            <Dialog
+                                                TriggerNode={
+                                                    <button className={`bg-red-100 rounded-lg px-2 py-1.5 text-sm w-full text-start`}>Remove User</button>
+                                                }
+                                                title={"Remove User# " + u.userId}
+                                            >
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="font-medium">Are you sure? This action causes deleting of record permanently and you can not undo this action</p>
+                                                    <div className="flex justify-end gap-4">
+                                                        <button
+                                                            onClick={() => TriggerClick('dialog-close-btn')}
+                                                            className="px-4 py-2 border-2 border-slate-400 outline-none rounded-lg bg-slate-100 text-slate-950 opacity-80 font-mono font-black text-base hover:border-blue-700 transition-border duration-300">Cancel</button>
+                                                        <button onClick={
+                                                            () => handleDeleteUser(u.userId)
+                                                        } className="px-4 py-2 border-2 border-red-300 hover:border-red-500 outline-none rounded-lg bg-red-300 text-slate-950 opacity-80 font-mono font-black text-base transition-border duration-300">Delete</button>
+                                                    </div>
+                                                </div>
+
+                                            </Dialog>
 
                                         </DropdownMenuContent>
                                     </DropdownMenu>

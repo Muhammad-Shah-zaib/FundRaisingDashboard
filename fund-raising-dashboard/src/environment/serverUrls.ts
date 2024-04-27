@@ -8,6 +8,8 @@ export const LoginUrl: string = `${serverUrl}/Login`;
 export const UsersUrl: string = `${serverUrl}/User`;
 
 export const GetAllUserUrl: string = `${UsersUrl}/GetAllUsers`;
+//  the delete user url should be like this: `${UsersUrl}/DeleteUser/${id}`
+export const DeleteUserUrl: string = `${UsersUrl}/DeleteUser/`;
 
 // * ------------------ CASES -------------------
 export const casesUrl: string = `${serverUrl}/Cases`;
