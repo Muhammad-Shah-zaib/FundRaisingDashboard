@@ -1,12 +1,13 @@
 import { IUserResponseDtoList } from "@/models/DTOs/IUserResponseDto";
 import UserService from "@/Services/UserService.ts"
-import {stopSpinner} from "@/utils/SpinnerFn.ts";
-import {toast} from "sonner";
-import {IRegistrationRequestDto} from "@/models/DTOs/RegistrationRequest.ts";
+import { startSpinner, stopSpinner } from "@/utils/SpinnerFn.ts";
+import { toast } from "sonner";
+import { IRegistrationRequestDto } from "@/models/DTOs/RegistrationRequest.ts";
 
 export type TGetAllUsersFn = (setUserState: (userList: IUserResponseDtoList) => void, spinnerId?: string) => void;
 export type TRegisterUserFn = (setUserState: (userList: IUserResponseDtoList) => void, data: IRegistrationRequestDto, spinnerId?: string) => void;
-export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn]{
+
+export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn] {
     // instantiating the UserService class
     const _userService = new UserService();
 
@@ -16,27 +17,37 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn]{
     const GetAllUsers: TGetAllUsersFn = (setUserState: (userList: IUserResponseDtoList) => void, spinnerId?: string) => {
         const users$ = _userService.GetAllUsers$();
 
-         users$.subscribe((res) => {
+        users$.subscribe((res) => {
             setUserState(res);
-             spinnerId && stopSpinner(spinnerId);
+            spinnerId && stopSpinner(spinnerId);
         }, (err) => {
-             console.error(err);
-             toast.error("Failed to fetch users");
-             spinnerId && stopSpinner(spinnerId)
-         })
+            console.error(err);
+            toast.error("Something went wrong.", {
+                description: "Check your Network and Try again.",
+                position: "top-right",
+                action: {
+                    label: "Retry",
+                    onClick: () => {
+                        spinnerId && startSpinner(spinnerId);
+                        GetAllUsers(setUserState, spinnerId)
+                    }
+                }
+            });
+            spinnerId && stopSpinner(spinnerId)
+        })
 
     }
 
     // TO REGISTER A USER
-    const RegisterUser: TRegisterUserFn = (setUserState: (userList: IUserResponseDtoList) => void, data: IRegistrationRequestDto, spinnerId?: string ) => {
+    const RegisterUser: TRegisterUserFn = (setUserState: (userList: IUserResponseDtoList) => void, data: IRegistrationRequestDto, spinnerId?: string) => {
         const registerUser$ = _userService.RegisterUser$(data);
 
-        registerUser$.subscribe((res)=> {
+        registerUser$.subscribe((res) => {
             console.group("Grouping")
             console.warn(res)
             console.groupEnd();
             // since new user is added, so now we need to fetch the new data again
-            if (res.status === 200){
+            if (res.status === 200) {
                 GetAllUsers(setUserState)
                 toast.success("User has registered successfully");
             }

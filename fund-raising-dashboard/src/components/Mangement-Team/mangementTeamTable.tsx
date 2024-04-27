@@ -1,18 +1,18 @@
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
 import {
     DropdownMenu,
     DropdownMenuContent, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
-import {IUserResponseDtoList} from "@/models/DTOs/IUserResponseDto.ts";
+import { IUserResponseDtoList } from "@/models/DTOs/IUserResponseDto.ts";
 import Spinner from "@/shared/component/Spinner.tsx";
 
 
 export interface IManagementTeamTable {
     userListState: IUserResponseDtoList
 }
-export default function ManagementTeamTable({userListState}: IManagementTeamTable): JSX.Element{
+export default function ManagementTeamTable({ userListState }: IManagementTeamTable): JSX.Element {
     return (
         <>
             <div className="h-[70vh] overflow-auto relative">
@@ -22,13 +22,13 @@ export default function ManagementTeamTable({userListState}: IManagementTeamTabl
 
                     <TableHeader>
                         <TableRow>
-                            <TableHead className={`w-[100px] hover:bg-slate-200 cursor-pointer`}>User Id</TableHead>
-                            <TableHead className={`hover:bg-slate-200 cursor-pointer`}>First Name</TableHead>
-                            <TableHead className={`hover:bg-slate-200 cursor-pointer`}>Last Name</TableHead>
-                            <TableHead className={`hover:bg-slate-200 cursor-pointer`}>Email</TableHead>
-                            <TableHead className={`hover:bg-slate-200 cursor-pointer`}>Registration date</TableHead>
-                            <TableHead className={`hover:bg-slate-200 cursor-pointer`}>Last login</TableHead>
-                            <TableHead className={`w-[100px] hover:bg-slate-200 cursor-pointer`}>Action</TableHead>
+                            <TableHead className={`w-[100px] hover:bg-blue-100 cursor-pointer`}>User Id</TableHead>
+                            <TableHead className={`hover:bg-blue-100 cursor-pointer`}>First Name</TableHead>
+                            <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Last Name</TableHead>
+                            <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Email</TableHead>
+                            <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Registration date</TableHead>
+                            <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Last login</TableHead>
+                            <TableHead className={`w-[100px] hover:bg-blue-100 cursor-pointer`}>Action</TableHead>
                         </TableRow>
                     </TableHeader>
 
