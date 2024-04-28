@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
 import {
     DropdownMenu,
-    DropdownMenuContent, DropdownMenuItem,
+    DropdownMenuContent,
     DropdownMenuLabel, DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
@@ -11,13 +11,14 @@ import useUserService from "@/customHooks/useUserService";
 import Dialog from "@/shared/component/Dialog";
 import TriggerClick from "@/utils/TriggerClick";
 import UpdateUserForm from "./UpdateUserForm";
+import ViewUserDetails from "./ViewUser";
 
 
-export interface IManagementTeamTable {
+interface IManagementTeamTableProps {
     userListState: IUserResponseDtoList
     setUserState: (userList: IUserResponseDtoList) => void
 }
-export default function ManagementTeamTable({ userListState, setUserState }: IManagementTeamTable): JSX.Element {
+export default function ManagementTeamTable({ userListState, setUserState }: IManagementTeamTableProps): JSX.Element {
 
     const DeletUser = useUserService()[2];
 
@@ -48,10 +49,18 @@ export default function ManagementTeamTable({ userListState, setUserState }: IMa
                     <TableBody>
                         {userListState.map(u => (
                             <TableRow>
+                                {/* BASIC INFO CELLS */}
                                 <TableCell className={`font-medium`}>{u.userId}</TableCell>
                                 <TableCell>{u.firstName}</TableCell>
                                 <TableCell>{u.lastName}</TableCell>
-                                <TableCell className="">{u.email.length > 10 ? u.email.substring(0, 10) + '...' : u.email}</TableCell>
+                                {/* EMAIL CELL */}
+                                <TableCell className="">
+                                    <div id="email-ctn" className="relative group cursor-pointer">
+                                        <span id="email-span" className="invisible group-hover:visible absolute left-0 top-[-1rem] group-hover:top-[-2rem] transition-all duration-200 bg-slate-200 px-2 py-1.5 rounded-lg">{u.email}</span>
+                                        {u.email.length > 10 ? u.email.substring(0, 10) + '...' : u.email}
+                                    </div>
+                                </TableCell>
+                                {/* USER TYPE CELL */}
                                 <TableCell className="">{u.userType}</TableCell>
                                 {/* REGISTRATION TIMESTAMP */}
                                 {(u.userAuthLogsList.filter(l => l.eventType === "Registration").length > 0) ?
@@ -73,12 +82,20 @@ export default function ManagementTeamTable({ userListState, setUserState }: IMa
                                         <DropdownMenuTrigger>
                                             <button className="px-4 py-2 outline-none hover:bg-slate-300 transition-all duration-300 rounded-lg shadow-md shadow-slate-300 tracking-wide font-black"> . . . </button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuLabel>User</DropdownMenuLabel>
+                                        <DropdownMenuContent className="max-w-[150px] overflow-hidden">
+                                            <DropdownMenuLabel >User</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem className={`rounded-lg`}>
-                                                View Details
-                                            </DropdownMenuItem>
+                                            {/* VIEW DETAILS */}
+                                            <Dialog
+                                                TriggerNode={
+                                                    <button className="px-2 text-sm py-1.5 hover:bg-slate-100 transition-all duration-300 ease-in border border-transparent hover:border-slate-100 text-start w-full rounded-lg">View Detials</button>
+                                                }
+                                                title={`User: ${u.userId}`}
+                                            >
+                                                <ViewUserDetails user={u} />
+                                            </Dialog>
+
+                                            {/* EDIT USER */}
                                             <Dialog
                                                 TriggerNode={
                                                     <button className="px-2 text-sm py-1.5 hover:bg-slate-100 transition-all duration-300 ease-in border border-transparent hover:border-slate-100 text-start w-full rounded-lg">Edit User</button>
@@ -89,6 +106,7 @@ export default function ManagementTeamTable({ userListState, setUserState }: IMa
                                                     <UpdateUserForm user={u} setUserState={setUserState} />
                                                 </div>
                                             </Dialog>
+                                            {/* REMOVE USER */}
                                             <Dialog
                                                 TriggerNode={
                                                     <button className={`bg-red-100 border border-red-200 hover:border-red-400 transition-all duration-300 ease-in rounded-lg px-2 py-1.5 mt-1 text-sm w-full text-start`}>Remove User</button>
