@@ -1,9 +1,10 @@
 import { IUserResponseDtoList } from "@/models/DTOs/IUserResponseDto.ts";
 import {ajax, AjaxResponse} from "rxjs/ajax";
-import {GetAllUserUrl, RegistrationUrl, DeleteUserUrl} from "@/environment/serverUrls.ts";
+import {GetAllUserUrl, RegistrationUrl, DeleteUserUrl, UpdateUserUrl} from "@/environment/serverUrls.ts";
 import {delay, Observable, tap} from "rxjs";
 import RegistrationResponseDto from "@/models/DTOs/RegistrationResponseDto.ts";
 import {IRegistrationRequestDto} from "@/models/DTOs/RegistrationRequest.ts";
+import { IUserUpdateRequestDto } from "@/models/DTOs/UpdateUserDto";
 
 export default class UserService {
 
@@ -33,5 +34,16 @@ export default class UserService {
                 if (res.status === 403) throw new Error("Un-Authorized access");
             })
         );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public UpdateUser$(userId: number, data: IUserUpdateRequestDto): Observable<AjaxResponse<any>>{
+        return ajax.put(UpdateUserUrl + userId, data)
+            .pipe(
+                delay(200),
+                tap(res => {
+                    if (res.status === 403) throw new Error("Un-Authorized access");
+                })
+            );
     }
 }

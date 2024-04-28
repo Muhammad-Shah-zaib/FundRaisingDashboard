@@ -10,6 +10,7 @@ import Spinner from "@/shared/component/Spinner.tsx";
 import useUserService from "@/customHooks/useUserService";
 import Dialog from "@/shared/component/Dialog";
 import TriggerClick from "@/utils/TriggerClick";
+import UpdateUserForm from "./UpdateUserForm";
 
 
 export interface IManagementTeamTable {
@@ -33,10 +34,11 @@ export default function ManagementTeamTable({ userListState, setUserState }: IMa
 
                     <TableHeader>
                         <TableRow>
-                            <TableHead className={`w-[100px] hover:bg-blue-100 cursor-pointer`}>User Id</TableHead>
+                            <TableHead className={`max-w-[100px] hover:bg-blue-100 cursor-pointer`}>User Id</TableHead>
                             <TableHead className={`hover:bg-blue-100 cursor-pointer`}>First Name</TableHead>
                             <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Last Name</TableHead>
                             <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Email</TableHead>
+                            <TableHead className={`hover:bg-blue-100 cursor-pointer`}>UserType</TableHead>
                             <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Registration date</TableHead>
                             <TableHead className={`hover:bg-blue-100 cursor-pointer`}>Last login</TableHead>
                             <TableHead className={`w-[100px] hover:bg-blue-100 cursor-pointer`}>Action</TableHead>
@@ -49,7 +51,8 @@ export default function ManagementTeamTable({ userListState, setUserState }: IMa
                                 <TableCell className={`font-medium`}>{u.userId}</TableCell>
                                 <TableCell>{u.firstName}</TableCell>
                                 <TableCell>{u.lastName}</TableCell>
-                                <TableCell>{u.email}</TableCell>
+                                <TableCell className="">{u.email.length > 10 ? u.email.substring(0, 10) + '...' : u.email}</TableCell>
+                                <TableCell className="">{u.userType}</TableCell>
                                 {/* REGISTRATION TIMESTAMP */}
                                 {(u.userAuthLogsList.filter(l => l.eventType === "Registration").length > 0) ?
                                     <TableCell>
@@ -76,12 +79,19 @@ export default function ManagementTeamTable({ userListState, setUserState }: IMa
                                             <DropdownMenuItem className={`rounded-lg`}>
                                                 View Details
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className={`rounded-lg`}>
-                                                Edit User
-                                            </DropdownMenuItem>
                                             <Dialog
                                                 TriggerNode={
-                                                    <button className={`bg-red-100 rounded-lg px-2 py-1.5 text-sm w-full text-start`}>Remove User</button>
+                                                    <button className="px-2 text-sm py-1.5 hover:bg-slate-100 transition-all duration-300 ease-in border border-transparent hover:border-slate-100 text-start w-full rounded-lg">Edit User</button>
+                                                }
+                                                title={"Edit User"}
+                                            >
+                                                <div className="w-full py-2">
+                                                    <UpdateUserForm user={u} setUserState={setUserState} />
+                                                </div>
+                                            </Dialog>
+                                            <Dialog
+                                                TriggerNode={
+                                                    <button className={`bg-red-100 border border-red-200 hover:border-red-400 transition-all duration-300 ease-in rounded-lg px-2 py-1.5 mt-1 text-sm w-full text-start`}>Remove User</button>
                                                 }
                                                 title={"Remove User# " + u.userId}
                                             >

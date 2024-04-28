@@ -19,6 +19,7 @@ export default function ManagementTeam() {
     useLayoutEffect(() => {
         startSpinner("management-team-table-spinner");
         GetAllUsers(setUsersState, "management-team-table-spinner");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 

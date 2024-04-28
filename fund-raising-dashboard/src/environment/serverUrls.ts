@@ -10,6 +10,8 @@ export const UsersUrl: string = `${serverUrl}/User`;
 export const GetAllUserUrl: string = `${UsersUrl}/GetAllUsers`;
 //  the delete user url should be like this: `${UsersUrl}/DeleteUser/${id}`
 export const DeleteUserUrl: string = `${UsersUrl}/DeleteUser/`;
+// the update user url should be like this: `${UsersUrl}/UpdateUser/${id}`
+export const UpdateUserUrl: string = `${UsersUrl}/UpdateUser/`;
 
 // * ------------------ CASES -------------------
 export const casesUrl: string = `${serverUrl}/Cases`;

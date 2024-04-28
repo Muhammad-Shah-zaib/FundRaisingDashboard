@@ -5,6 +5,7 @@ export interface IUserResponseDto {
     firstName: string
     lastName: string
     email: string
+    userType: string
     userAuthLogsList: UserAuthLogsList[]
 }
 

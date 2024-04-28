@@ -4,12 +4,14 @@ import { startSpinner, stopSpinner } from "@/utils/SpinnerFn.ts";
 import { toast } from "sonner";
 import { IRegistrationRequestDto } from "@/models/DTOs/RegistrationRequest.ts";
 import TriggerClick from "@/utils/TriggerClick";
+import { IUserUpdateRequestDto } from "@/models/DTOs/UpdateUserDto";
 
 export type TGetAllUsersFn = (setUserState: (userList: IUserResponseDtoList) => void, spinnerId?: string) => void;
 export type TRegisterUserFn = (setUserState: (userList: IUserResponseDtoList) => void, data: IRegistrationRequestDto, spinnerId?: string) => void;
-export type TDeleteUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, spinnerId?: string, dialogSpinner?: string) => void;
+export type TDeleteUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, spinnerId?: string, dialogSpinnerId?: string) => void;
+export type TUpdateUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, data: IUserUpdateRequestDto, spinnerId?: string, dialogSpinnerId?: string) => void;
 
-export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDeleteUserFn] {
+export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDeleteUserFn, TUpdateUserFn] {
     // instantiating the UserService class
     const _userService = new UserService();
 
@@ -64,8 +66,8 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDel
         });
     }
 
-    const DeleteUser: TDeleteUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, spinnerId?: string, dialogSpinner?: string) => {
-        dialogSpinner && startSpinner(dialogSpinner);
+    const DeleteUser: TDeleteUserFn = (setUserState: (userList: IUserResponseDtoList) => void, userId: number, spinnerId?: string, dialogSpinnerId?: string) => {
+        dialogSpinnerId && startSpinner(dialogSpinnerId);
         const deleteUser$ = _userService.DeleteUser$(userId);
 
         deleteUser$.subscribe((res) => {
@@ -76,12 +78,30 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDel
                 });
                 GetAllUsers(setUserState, spinnerId);
             }
-            dialogSpinner && stopSpinner(dialogSpinner);
+            dialogSpinnerId && stopSpinner(dialogSpinnerId);
         }, (err) => {
             console.error(err);
             toast.error("User deletion failed");
-            dialogSpinner && stopSpinner(dialogSpinner);
+            dialogSpinnerId && stopSpinner(dialogSpinnerId);
         });
     }
-    return [GetAllUsers, RegisterUser, DeleteUser];
+
+
+    const UpdateUser: TUpdateUserFn = (setUserState, userId, data, spinnerId?, dialogSpinnerId?) => {
+        dialogSpinnerId && startSpinner(dialogSpinnerId);
+        const updateUser$ = _userService.UpdateUser$(userId, data);
+
+        updateUser$.subscribe((res) => {
+            if (res.status === 200) {
+                toast.success("User has been updated successfully");
+                GetAllUsers(setUserState, spinnerId);
+            }
+            dialogSpinnerId && stopSpinner(dialogSpinnerId);
+        }, (err) => {
+            console.error(err);
+            toast.error("User updation failed");
+            dialogSpinnerId && stopSpinner(dialogSpinnerId);
+        });
+    }
+    return [GetAllUsers, RegisterUser, DeleteUser, UpdateUser];
 }
