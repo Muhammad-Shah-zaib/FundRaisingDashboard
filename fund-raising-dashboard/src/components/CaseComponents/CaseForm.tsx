@@ -14,13 +14,13 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
         defaultValues: {
             title: "",
             description: "",
-            causeName: "MESS_FEE"
+            causeName: "MESS_FEE",
+            verifiedStatus: false
         }
     });
 
     const onSubmit: SubmitHandler<ICaseRequestDto> = (data) => {
         startSpinner("CaseFormSpinner");
-        console.log("sending\n" + JSON.stringify(data))
         const addCase$ = addCaseAsync(data);
         addCase$.subscribe({
             next: () => {
@@ -39,13 +39,10 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
                         console.error(err);
                     }
                 })
-
-
             },
             // error for failing the in adding case
             error: (err) => {
                 stopSpinner("CaseFormSpinner");
-                toast.success("Case Added Successfully");
                 if (err.status === 500)
                     setError("root", {
                         message: "Internal server Error"
@@ -59,8 +56,6 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
                     })
                 }
             },
-
-
         });
     }
     return (
@@ -79,13 +74,17 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
                 {errors.title && <span className="text-red-800 bg-red-200 text-sm font-bold w-full px-4 py-1 rounded-lg">{errors.title.message}</span>}
             </div>
 
-            {/* CAUSE */}
-            <div className="flex">
-                <select onChange={(e) => setValue("causeName", e.target.value)} name="cause" id="cause" className="SELECT-ARROW outline-none w-full px-4 py-2 rounded-lg border-2 border-slate-400">
+            {/* CAUSE AND VERIFIED STATUS */}
+            <div className="grid grid-cols-2 gap-4">
+                <select onChange={(e) => setValue("causeName", e.target.value)} name="cause" id="cause" className="SELECT-ARROW outline-none w-full px-4 py-1 rounded-lg border-2 border-slate-400">
                     <option value="MESS_FEE">Mess Fee</option>
                     <option value="HOSTEL_FEE">Hostel Fee</option>
                     <option value="TUITION_FEE">Tuition Fee</option>
                 </select>
+                <div className='flex gap-2 items-center'>
+                    <input onChange={(e)=> setValue("verifiedStatus", e.target.checked)} type="checkbox" name="verifiedStatus" id="verifiedStatus" value={'true'} />
+                    <label htmlFor="verifiedStatus">Verified status</label>
+                </div>
             </div>
             {/* DESIPTION */}
             <div className='flex flex-col gap-1'>

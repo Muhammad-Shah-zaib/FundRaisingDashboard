@@ -5,6 +5,7 @@ import { getAllCases$, updateCase$ } from "@/Services/CaseService";
 import { Case, CaseList } from "@/models/DTOs/CasesResponseDto";
 import { toast } from "sonner";
 import TriggerClick from "@/utils/TriggerClick";
+import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
 
 interface IEditCaseFormProps {
     caseId: number;
@@ -17,15 +18,17 @@ function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormPr
         defaultValues: {
             title: existingCase.title,
             description: existingCase.description,
-            causeName: existingCase.causeName
+            causeName: existingCase.causeName,
+            verifiedStatus: existingCase.verifiedStatus
         }
     });
-    const updateCase = (data: ICaseRequestDto) => {
+    const updateCase = (data: ICaseRequestDto, dialogSpinnerId?: string) => {
         // updating the case
+        dialogSpinnerId && startSpinner(dialogSpinnerId);
         const case$ = updateCase$(caseId, data);
         case$.subscribe({
-            next: (res) => {
-                res.response && console.log(res.response);
+            next: () => {
+                dialogSpinnerId && stopSpinner(dialogSpinnerId);
                 // since the case is updated we will get the updated cases
                 const cases$ = getAllCases$();
                 cases$.subscribe({
@@ -47,8 +50,7 @@ function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormPr
     }
 
     const onSubmit: SubmitHandler<ICaseRequestDto> = (data) => {
-        console.log(data);
-        updateCase(data);
+        updateCase(data, 'dialog-spinner');
     }
     return (
         <form className='flex flex-col gap-4 text-slate-900'>
@@ -66,13 +68,17 @@ function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormPr
                 {errors.title && <div className="col-span-3 text-sm w-full px-4 py-2 font-black bg-red-200 text-red-800 rounded-lg">{errors.title.message}</div>}
             </div>
 
-            {/* Cause Name */}
-            <div className="flex">
-                <select onChange={(e) => setValue("causeName", e.target.value)} name="cause" id="cause" className="SELECT-ARROW outline-none focus:border-blue-700 text-lg font-bold font-mono w-full px-4 py-2 rounded-lg border-2 border-slate-400">
+            {/* CAUSE NAME AND VERIFIED STATUS */}
+            <div className="grid grid-cols-2 gap-4">
+                <select onChange={(e) => setValue("causeName", e.target.value)} name="cause" id="cause" className="SELECT-ARROW outline-none focus:border-blue-700 text-lg font-bold font-mono w-full px-4 py-1 rounded-lg border-2 border-slate-400">
                     <option value="MESS_FEE">Mess Fee</option>
                     <option value="HOSTEL_FEE">Hostel Fee</option>
                     <option value="TUITION_FEE">Tuition Fee</option>
                 </select>
+                <div className="flex gap-2 items-center">
+                    <input type="checkbox" checked={existingCase.verifiedStatus} onChange={(e)=> setValue("verifiedStatus", e.target.checked)} name="verifiedStatus" id="verifiedStatus" />
+                    <label htmlFor="verifiedStatus" className="cursor-pointer font-medium select-none">Verified Status</label>
+                </div>
             </div>
 
             {/* Description */}

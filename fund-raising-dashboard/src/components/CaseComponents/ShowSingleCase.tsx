@@ -39,6 +39,30 @@ export default function ShowSingleCase({
                     <div className={`flex gap-4`}>
                         <span className={`text-lg font-medium`}>Cause: {causeName.replace(/_/g, ' ')}</span>
                     </div>
+                    
+                    <div>
+                        <span
+                            className={`text-base font-bold text-slate-900`}
+                        >Description: </span>
+                    </div>
+                    <div className={`flex border-b border-slate-400 pb-2`}>
+                        <textarea
+                            rows={10}
+                            cols={50}
+                            disabled={true}
+                            value={description}
+                            className={`px-4 py-2 text-base font-semibold font-mono bg-slate-100 border-slate-400 hover:border-blue-600 
+                                    border-2 rounded-lg w-full`}
+                            style={{ transition: 'border-color 0.2s' }}
+                        >
+                        </textarea>
+                    </div>
+
+                    {/* TIMESTAMPS */}
+                    <div className='flex justify-center'>
+                        <span className='text-lg font-black font-mono text-slate-800'>TimeStamps</span>
+                    </div>
+
                     {/* created date time stamp */}
                     <div className={`grid grid-cols-5 items-center gap-1`}>
                         <label
@@ -63,7 +87,7 @@ export default function ShowSingleCase({
                         }
                     </div>
                     {/* RESOLVE TIMESTAMP */}
-                    <div className={`grid grid-cols-5 items-center gap-1`}>
+                    <div className={`grid grid-cols-5 items-center gap-1 border-b border-slate-400 pb-2`}>
                         <label
                             className={"min-w-[150px] text-sm"}><strong>Resolved at:</strong>
                         </label>
@@ -77,39 +101,8 @@ export default function ShowSingleCase({
                             <input disabled={true}  className='col-span-4 border-2 cursor-default border-slate-400 px-2 py-1.5 rounded-lg hover:border-blue-700 transition-all duration-300 w-full text-center font-bold font-mono text-red-500' type="text" value={"Not Resolved Yet"} />
                         }
                     </div>
-
-                    {/* CLOSE TIMESTAMP */}
-                    <div className={`grid grid-cols-5 items-center gap-1`}>
-                        <label
-                            className={"min-w-[150px] text-sm"}><strong>Clo at:</strong>
-                        </label>
-                        {
-                            caseLogs.filter(l => l.logType === 'CLOSED_DATE').map(l => l.logDate).length > 0 ?
-                            <>
-                                <input disabled={true}  className='border-2 cursor-default border-slate-400 px-2 py-1.5 rounded-lg hover:border-blue-700 transition-all duration-300 w-full col-span-2 text-center font-bold' type="text" value={caseLogs.filter(l => l.logType === 'Deleted_DATE').map(l => l.logDate)[0]} />
-
-                                <input disabled={true}  className='border-2 cursor-default border-slate-400 px-2 py-1.5 rounded-lg hover:border-blue-700 transition-all duration-300 w-full col-span-2 text-center font-bold' type="text" value={caseLogs.filter(l => l.logType === 'Deleted_DATE').map(l => l.logTime)[0]} />
-                            </>
-                            :
-                            <input disabled={true}  className='col-span-4 border-2 cursor-default border-slate-400 px-2 py-1.5 rounded-lg hover:border-blue-700 transition-all duration-300 w-full text-center font-bold font-mono text-red-500' type="text" value={"Not Deleted Yet"} />
-                        }
-                    </div>
-                    <div>
-                        <span
-                            className={`text-base font-bold text-slate-900`}
-                        >Description: </span>
-                    </div>
-                    <div className={`flex`}>
-                        <textarea
-                            rows={10}
-                            cols={50}
-                            disabled={true}
-                            value={description}
-                            className={`px-4 py-2 text-base font-semibold font-mono bg-slate-100 border-slate-400 hover:border-blue-600 
-                                    border-2 rounded-lg w-full`}
-                            style={{ transition: 'border-color 0.2s' }}
-                        >
-                        </textarea>
+                    <div className='flex justify-center'>
+                        <span className='font-mono font-black text-lg text-slate-800'>Files</span>
                     </div>
 
                     <div className={`flex gap-4 items-center`}>
