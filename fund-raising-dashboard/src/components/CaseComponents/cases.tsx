@@ -19,6 +19,7 @@ export default function Cases() {
         const cases$ = getAllCases$();
         cases$.subscribe({
             next: (cases) => {
+                console.warn(cases);
                 setCases(cases);
                 stopSpinner("CasesTableSpinner");
             },

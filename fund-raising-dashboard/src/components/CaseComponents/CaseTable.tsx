@@ -172,7 +172,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                     </Dialog>
 
                                 </TableCell>
-                                <TableCell>{c.createdDate}</TableCell>
+                                <TableCell>{c.caseLogs.filter(l => l.logType === 'CREATED_DATE').map(l => l.logDate)}</TableCell>
                                 <TableCell>{c.causeName}</TableCell>
                                 <TableCell className="text-end">
                                     <DropdownMenu>
