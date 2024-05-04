@@ -41,7 +41,7 @@ export default function NewUserForm({ setUserStateFn }: INewUserFormProps) {
                 TriggerNode={
                     <div id="sheet" onClick={() => ResetForm()}
                         className="w-full px-4 py-2 hover:bg-slate-200 transition-all duration-300 flex gap-3 shadow-md shadow-slate-400">
-                        <div className="w-full py-2 flex items-center justify-between px-4">
+                        <div className="w-full py-2 flex items-center justify-between px-4 border-b-4 border-transparent">
                             <h1 className="cursor-pointer text-2xl font-bold text-primary">Add New User</h1>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 className="w-6 h-6">

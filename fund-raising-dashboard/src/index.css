@@ -14,3 +14,12 @@
     background-position: right 0.7rem top 50%;
     background-size: 0.65rem auto;
 }
+
+.input-ctn .input-field:placeholder-shown ~ .fake-placeholder
+{
+    @apply top-3 text-base left-10 border-blue-700
+}
+
+.input-ctn .input-field:focus ~ .fake-placeholder {
+    @apply top-0 text-xs left-9
+}

@@ -3,6 +3,7 @@ export default interface ICaseRequestDto {
     description: string;
     causeName: string;
     verifiedStatus: boolean;
+    requiredDonations:number;
 }
 
 export interface CaseDto extends ICaseRequestDto {

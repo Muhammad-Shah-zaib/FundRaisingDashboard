@@ -2,8 +2,9 @@ export type CaseList = Case[]
 
 export interface Case {
     caseId: number
-    totalDonations: number
+    requiredDonations: number
     collectedDonations: number
+    remainingDonations: number;
     caseLogs: CaseLog[]
     title: string
     description: string

@@ -1,5 +1,5 @@
 import Sheet from '@/shared/component/Sheet';
-import { MouseEvent as MouseEventReact, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CaseList } from "@/models/DTOs/CasesResponseDto";
 import Spinner from "@/shared/component/Spinner.tsx";
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn.ts";
@@ -54,15 +54,6 @@ export default function Cases() {
         MemorizedFetchAllCases();
     }, [MemorizedFetchAllCases]);
 
-    const handleHeaderState = (e: MouseEventReact<HTMLHeadingElement, MouseEvent>) => {
-        const caseHeader = e.target as HTMLElement;
-        const siblingHeaderId = caseHeader.id === "VERIFIED_CASES" ? "UNVERIFIED_CASES" : "VERIFIED_CASES";
-        const siblingHeader = document.getElementById(siblingHeaderId) as HTMLElement;
-        caseHeader.classList.add("border-b-4");
-        caseHeader.classList.remove("border-b-0");
-        siblingHeader.classList.remove("border-b-4");
-        siblingHeader.classList.add("border-b-0");
-    }
     return (
         <>
             {/* container */}
@@ -70,22 +61,8 @@ export default function Cases() {
                 {/* Date goes here */}
                 <span className="text-sm text-primary opacity-75 ">24th March, 2024</span>
 
-                {/* Header for verified and unverified Cases */}
-                <div className="w-full px-4 py-2 bg-slate-50 flex gap-3 shadow-md shadow-slate-400">
-                    <div className="w-full ">
-                        <h1 id="VERIFIED_CASES" onClick={(e) => handleHeaderState(e)}
-                            className="transition-all duration-50 border-blue-500 w-full py-2 text-center cursor-pointer text-2xl font-bold text-primary  border-b-4">Verified
-                            Cases</h1>
-                    </div>
-                    <div className="w-full ">
-                        <h1 id="UNVERIFIED_CASES" onClick={(e) => handleHeaderState(e)}
-                            className="transition-all duration-50 border-blue-500 w-full py-2 text-center cursor-pointer text-2xl font-bold text-primary">Unverified
-                            Cases</h1>
-                    </div>
-                </div>
-
                 {/* USING MY OWN REUSABLE SHEET COMPONENT */}
-                <div className={`grid grid-cols-3 items-center`}>
+                <div className={`grid grid-cols-2 gap-4 items-center`}>
                     <Sheet
                         TriggerNode={
                             <TriggerNode />
@@ -96,13 +73,27 @@ export default function Cases() {
                     >
                         <CaseForm setCasesStateFn={setCases}></CaseForm>
                     </Sheet>
+                    {/* SEARCH BAR AND FILTERS */}
+                    <div className='w-full h-full flex relative'>
+                        <div className='absolute left-2 top-3 pointer-events-none z-20'>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-slate-500">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                        </div>
+                        
+                        <div className='absolute right-0 top-0 flex items-center z-20 justify-center w-9 h-full cursor-pointer hover:bg-slate-100 border-b-2 border-transparent hover:border-yellow-400 transition-all duration-200'>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                            </svg>
+                        </div>
+                        <div className='flex items-center w-full relative input-ctn'>
+                            <input type="text" className='group h-full w-full px-10 pt-2  outline-none border-b-2 border-blue-600 focus:border-blue-700 transition-all duration-200 bg-slate-50 text-slate-800 font-medium placeholder-transparent input-field focus:placeholder-opacity-100 focus:placeholder:text-slate-400 placeholder-shown:border-slate-400' placeholder='#22' />
+                            <span className='fake-placeholder absolute left-9 top-0 transition-all duration-200 text-slate-400 text-xs pointer-events-none'>Search by #id, title, Cause</ span>
+                        </div>
+                    </div>
                 </div>
-
-
-
                 {/* Table goes here */}
                 <CaseTable cases={casesState} setCaseFn={setCases}></CaseTable>
-
             </div>
         </>
     )
@@ -111,7 +102,7 @@ export default function Cases() {
 const TriggerNode = () => {
     return (
         <div id="new-case-sheet"
-            className="w-full group flex gap-4 justify-between items-center lg:min-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-sm shadow-slate-300 ">
+            className="w-full group flex gap-4 justify-between items-center lg:min-w-[400px] hover:bg-slate-300 hover:shadow-slate-300 transition-all duration-300 py-2 px-4 shadow-md shadow-slate-400 ">
 
             <span className="font-bold text-primary text-2xl">
                 Create New Case

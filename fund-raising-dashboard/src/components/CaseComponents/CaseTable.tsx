@@ -126,7 +126,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
 
 
     return (
-        <div className="h-[60vh] overflow-auto relative">
+        <div className="h-[75vh] overflow-auto relative">
             <Spinner BgClass={"bg-transparent"} id={"CasesTableSpinner"}></Spinner>
             <Table>
                 <TableCaption>List of cases ends here.</TableCaption>
@@ -138,13 +138,14 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Verified Status</TableHead>
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Created Date</TableHead>
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Cause</TableHead>
+                        <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer">Donations</TableHead>
                         <TableHead className="w-[150px] hover:bg-blue-100 cursor-pointer text-end">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
                         cases.map(c => (
-                            <TableRow key={c.caseId}>
+                            <TableRow key={c.caseId} className={`cursor-default duration-300 transition-all ${c.collectedDonations > c.requiredDonations ? 'hover:bg-green-100': null}`}>
                                 <TableCell className={"font-bold"}>#{c.caseId}</TableCell>
                                 <TableCell className="font-medium">{c.title}</TableCell>
                                 <TableCell>
@@ -171,10 +172,11 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                             </div>
                                         </div>
                                     </Dialog>
-
                                 </TableCell>
                                 <TableCell>{c.caseLogs.filter(l => l.logType === 'CREATED_DATE').map(l => l.logDate)}</TableCell>
                                 <TableCell>{c.causeName}</TableCell>
+                                <TableCell className={`font-medium ${c.collectedDonations > c.requiredDonations ? 'text-green-500': null}`}>{c.collectedDonations} / {c.requiredDonations}</TableCell>
+                                {/* ACTIONS */}
                                 <TableCell className="text-end">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>

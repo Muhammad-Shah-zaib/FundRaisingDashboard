@@ -19,7 +19,8 @@ function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormPr
             title: existingCase.title,
             description: existingCase.description,
             causeName: existingCase.causeName,
-            verifiedStatus: existingCase.verifiedStatus
+            verifiedStatus: existingCase.verifiedStatus,
+            requiredDonations: existingCase.requiredDonations
         }
     });
     const updateCase = (data: ICaseRequestDto, dialogSpinnerId?: string) => {
@@ -80,7 +81,20 @@ function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormPr
                     <label htmlFor="verifiedStatus" className="cursor-pointer font-medium select-none">Verified Status</label>
                 </div>
             </div>
-
+            {/* REQUIRED AMOUNT */}
+            <div className='flex flex-col gap-1 form-input-ctn relative'>
+                <input 
+                {...register("requiredDonations", {
+                    required: "Amount is Required",
+                    min: { value: 501, message: "Amount must be greater than 500" }
+                })}
+                type="number" 
+                id='requiredDonations' 
+                className='input-field transition-all duration-300 hover:border-blue-700 outline-none focus:border-blue-700 border-slate-400  border-2 pt-3 pb-1 px-2 w-full rounded-lg placeholder-transparent focus:placeholder-opacity-100 focus:placeholder:text-slate-400' 
+                placeholder='Ex:10000' />
+                {errors.requiredDonations && <span className="text-red-800 bg-red-200 text-sm font-bold w-full px-4 py-1 rounded-lg">{errors.requiredDonations.message}</span>}
+                <span className='fake-placeholder pointer-events-none text-slate-500 absolute left-2 top-0 text-xs transition-all duration-300'>Enter Required Amount</span>
+            </div>
             {/* Description */}
             <div>
                 <textarea

@@ -13,6 +13,9 @@ export default function ShowSingleCase({
     caseLogs,
     verifiedStatus,
     causeName,
+    requiredDonations,
+    remainingDonations,
+    collectedDonations,
     children
 }: ShowSingleCase): JSX.Element {
     return (
@@ -57,7 +60,23 @@ export default function ShowSingleCase({
                         >
                         </textarea>
                     </div>
+                    {/* DONATIONS */}
+                    <div className='flex justify-center'>
+                        <span className='text-lg font-black font-mono text-slate-800'>Donations</span>
+                    </div>
 
+                    <div className='grid grid-cols-3 items-center gap-2'>
+                        <label className='text-sm'><strong>Required Amount</strong></label>
+                        <input type="text" disabled={true} value={requiredDonations} className='col-span-2 px-4 py-1 text-center border-2 border-slate-400 hover:border-blue-700 transition-all duration-300 rounded-lg'  />
+                    </div>
+                    <div className='grid grid-cols-3 items-center gap-2'>
+                        <label className='text-sm'><strong>Collected Amount</strong></label>
+                        <input type="text" disabled={true} value={collectedDonations} className='col-span-2 px-4 py-1 text-center border-2 border-slate-400 hover:border-blue-700 transition-all duration-300 rounded-lg'  />
+                    </div>
+                    <div className='grid grid-cols-3 items-center gap-2 pb-4 border-b-2 border-slate-400'>
+                        <label className='text-sm'><strong>Remaining Amount</strong></label>
+                        <input type="text" disabled={true} value={remainingDonations} className='col-span-2 px-4 py-1 text-center border-2 border-slate-400 hover:border-blue-700 transition-all duration-300 rounded-lg'  />
+                    </div>
                     {/* TIMESTAMPS */}
                     <div className='flex justify-center'>
                         <span className='text-lg font-black font-mono text-slate-800'>TimeStamps</span>
