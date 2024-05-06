@@ -1,210 +1,70 @@
-import { Link } from "react-router-dom";
-
+import useCaseTransactionService from "@/customHooks/useCaseTransactionService";
+import { ICaseTransactionResponse } from "@/models/DTOs/CaseTransactionResponseDto";
+import Spinner from "@/shared/component/Spinner";
+import { useEffect, useState } from "react";
 
 export function Dashboard() {
+    const [transactions, setTransactions] = useState<ICaseTransactionResponse>([]);
+
+    const [getAllCaseTransactions] = useCaseTransactionService();
+
+    useEffect(() => {
+        getAllCaseTransactions(setTransactions, 'donation-spinner');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             {/* Container */}
-            <div className="h-full w-full flex flex-col gap-8 px-16 py-4">
-
-                {/* 
-                * header 
-                * Cause Bank
-                */}
-                <header className="flex w-full">
-                    <Link to={'/causes-bank'} className="hover:shadow-md hover:bg-slate-100 shadow-slate-400 transition-shadow duration-300 cursor-pointer w-full py-3 px-2 shadow-md flex bg-slate-50 flex-col gap-4">
-                        <h2 className="text-3xl font-bold opacity-60">Cause Bank:</h2>
-                        <span className="text-4xl font-bold self-center">283,990 Rs</span>
-                    </Link>
-                </header>
+            <div className="h-full w-full flex flex-col gap-8 px-4 py-4">
 
                 {/* Donation Received */}
-                <div className="h-[70%]">
-                    <span className="text-3xl font-medium ">Donation Received</span>
+                <div className="h-auto">
+                    <span className="text-3xl font-medium">Donation Received</span>
 
                     {/* Table goes here */}
-                    <div className="overflow-scroll h-[60vh]">
-
+                    <div className="overflow-scroll h-[88vh] w-full relative">
+                        <Spinner 
+                            id="donation-spinner"
+                            BgClass="bg-transparent">
+                        </Spinner>
                         {/* Date goes here */}
-                        <div className="w-full py-2 border-b border-slate-300">
-                            <span className="font-medium text-base opacity-75">Monday 24th March, 2024</span>
+                        <div className="grid grid-cols-5 w-full py-2 pl-4 border-b border-slate-300">
+                            {/* <span className="font-medium text-base opacity-75">Monday 24th March, 2024</span> */}
+                            <span>#id</span>
+                            <span className="col-span-2">Donor name</span>
+                            <span>#Case Id</span>
+                            <span className="w-full text-end pr-4">Amount</span>
                         </div>
 
                         {/* contents container */}
-                        <div className="flex flex-col gap-4 w-full py-2 pr-4">
-
+                        <div className="flex flex-col gap-x-4 w-full py-2 relative">
+                            
                             {/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
+                            {transactions.map(t => 
+                                <div className="grid hover:bg-slate-100 py-2 pl-4 grid-cols-5 gap-4 w-full">
 
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-blue-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Mess</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
+                                    <div className="w-full">
+                                        <span>#{t.caseTransactionId}</span>
                                     </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>
-
-                            {/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
+                                    
+                                    <div className="col-span-2 flex gap-3 items-center">
+                                        <div className="flex flex-col">
+                                            <span className="text-base text-[#273240] font-medium">{t.donorFirstName} {t.donorLastName}</span>
+                                            {/* date goes here */}
+                                            <span className="text-sm opacity-40">{t.transacntionLogDate}</span>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>
-
-
-                            {/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
+                                    <div className="text-base text-[#273240] font-medium">
+                                        {t.caseId}
                                     </div>
+
+                                    <span className="text-end text-base text-[#273240] font-medium pr-4">{t.transactionAmount} Rs</span>
                                 </div>
+                            )}
 
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
 
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>
-
-                            {/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>
-
-                            {/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>{/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>{/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>{/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>{/* single content container */}
-                            <div className="grid grid-cols-4 w-full">
-
-                                {/* title and picture */}
-                                <div className="col-span-2 flex gap-3 items-center">
-                                    <div className="w-[50px] h-[50px] rounded-[100%] bg-red-400"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-base text-[#273240] font-medium">Hostel Fee</span>
-                                        {/* date goes here */}
-                                        <span className="text-sm opacity-40">5:12 pm</span>
-                                    </div>
-                                </div>
-
-                                <div className="text-base text-[#273240] font-medium">
-                                    Hassam Ali
-                                </div>
-
-                                <span className="text-end text-base text-[#273240] font-medium">50 Rs</span>
-                            </div>
                         </div>
                     </div>
 
