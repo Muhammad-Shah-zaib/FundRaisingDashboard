@@ -1,6 +1,7 @@
 import { ICaseTransactionResponse } from "@/models/DTOs/CaseTransactionResponseDto";
 import CaseTransactionService from "@/Services/CaseTransactionService";
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn";
+import { toast } from "sonner";
 
 
 type TgetTransactions = (setTransactionStateFn: (CaseTransactionsList: ICaseTransactionResponse)=> void, spinnerId?: string) => void;
@@ -23,12 +24,15 @@ export default function useCaseTransactionService() {
         _caseTransactionService.getAllTransactions()
             .subscribe(res => {
                 setTransactionStateFn(res);
+                console.warn(res);
                 // stop spinner
                 spinnerId && stopSpinner(spinnerId);
             }, err => {
                 console.log(err)
                 if (err.status === 500) alert("Internal server Error please try agian later");
-                else alert("Something went wrong, Check your network connection and try again later");
+                else toast.error("Some went wrong", {
+                    description: "Check your network connection and try again later."
+                });
 
                 // stop spinner
                 spinnerId && stopSpinner(spinnerId);
