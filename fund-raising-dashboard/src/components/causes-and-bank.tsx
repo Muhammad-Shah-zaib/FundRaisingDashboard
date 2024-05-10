@@ -12,9 +12,13 @@ import Spinner from "@/shared/component/Spinner";
 import useCauseBankService from "@/customHooks/useCauseBankService";
 import { useEffect, useState } from "react";
 import { TCasueList } from "@/models/DTOs/CauseResponseDto";
+import Dialog from "@/shared/component/Dialog";
+import EditCauseForm from "./EditCauseForm";
+import TriggerClick from "@/utils/TriggerClick";
 
 interface ICreateCause {
     name: string;
+    description: string;
 }
 export default function CausesAndBank() {
     // Hooks
@@ -35,14 +39,17 @@ export default function CausesAndBank() {
     }
 
     useEffect(() => {
-        getAllCauses(setCauseState);
+        getAllCauses(setCauseState, 'cause-spinner');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
             {/* Container */}
-            <div className="h-full w-full flex flex-col gap-8 px-16 py-4">
+            <div className="relative h-full w-full flex flex-col gap-8 px-16 py-4">
+                {/* SPINNER */}
+                <Spinner id="cause-spinner" BgClass="transparent" />
+
                 {/* Create new Cause */}
                 <Sheet>
                     <SheetTrigger asChild>
@@ -70,9 +77,9 @@ export default function CausesAndBank() {
                         <SheetHeader>
                             {/* VALIDATION FOR ROOT ERRORS */}
                             {errors.root && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.root.message}</span>}
-                            <SheetTitle>Edit profile</SheetTitle>
+                            <SheetTitle>New Cause</SheetTitle>
                             <SheetDescription>
-                                Make changes to your profile here. Click save when you're done.
+                                Make sure to add a proper description as is shown to all other users.
                             </SheetDescription>
                         </SheetHeader>
                         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 py-4">
@@ -92,6 +99,17 @@ export default function CausesAndBank() {
                                 {/* validation for NAME field */}
                                 {errors.name && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.name.message}</span>}
                             </div>
+                            <div className="w-full flex flex-col gap-2">
+                                <textarea {...register("description", {
+                                    required: "Description is required",
+                                    maxLength: {
+                                        value: 1028,
+                                        message: "Description should be less than 1028 characters"
+                                    }
+                                })} name="description" id="description" className="w-full h-[40vh] outline-none border-2 border-slate-400 hover:border-blue-700 rounded-lg transition-all duration-300 px-2 py-1.5" placeholder="Description..."></textarea>
+                                {errors.description && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.description.message}</span>}
+                            </div>
+
                             <div className="w-full">
                                 <button disabled={isSubmitting} className="text-lg font-medium w-full text-center bg-slate-100 rounded-lg px-4 py-2 hover:bg-slate-300 transition-all duration-300 shadow-md shadow-slate-300">{isSubmitting ? 'Creating...' : 'Create'}</button>
                             </div>
@@ -102,31 +120,61 @@ export default function CausesAndBank() {
 
 
                 {/* Current Cause and there Balance */}
-                <div className="grid grid-cols-2 gap-4 overflow-scroll p-2 max-h-[56vh] relative">
+                <div className="grid grid-cols-2 gap-4 overflow-scroll p-2 max-h-[75vh] relative">
                     {/* Single Card */}
                     {causeState.map(c =>
                         <>
-                            <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col justify-between min-h-[100px] gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
+                            <div className="group cursor-default hover:shadow-none transition-shadow duration-200 flex flex-col justify-between min-h-[100px] gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
                                 <div className="w-full flex justify-between">
                                     <span className="text-start text-lg font-mono font-black">
                                         {c.causeTitle}
                                     </span>
-                                    <span>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="currentColor"
-                                            className="w-9 h-9 text-red-400  group-hover:text-red-600"
+                                    <div className="flex gap-2 items-center">
+                                        {/* EDIT BTN */}
+                                        <Dialog
+                                            TriggerNode={
+                                                <span className="cursor-pointer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                                                        <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                                                        <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                                                    </svg>
+                                                </span>
+                                            }
+                                            title={`Edit ${c.causeTitle} Cause`}
                                         >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    </span>
+                                            <EditCauseForm cause={c}></EditCauseForm>
+                                        </Dialog>
+                                        {/* CLOSE BTN */}
+                                        <Dialog
+                                            TriggerNode={
+                                                <span className="cursor-pointer">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24"
+                                                        fill="currentColor"
+                                                        className="w-6 h-6 text-red-400  group-hover:text-red-600"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                            }
+                                            title={`Close ${c.causeTitle} Cause`}
+                                            titleClass="text-red-700 font-medium text-lg"
+                                        >
+                                            <div className="flex flex-col gap-4 font-medium">
+                                                <p>Are you sure you want to close this cause? <em className="text-red-700">You can not undo this later!</em></p>
+                                                <div className="flex gap-4 self-end">
+                                                    <button className="text-lg border-2 border-slate-400 px-4 rounded-lg hover:border-red-700 py-1 hover:bg-red-100 hover:text-red-700 transition-all duration-300">Yes</button>
+                                                    <button onClick={() => TriggerClick("dialog-close-btn")} className="border-2 border-green-100 hover:border-green-400 text-lg font-medium bg-green-100 text-green-700 rounded-lg px-4 py-1 hover:bg-green-200 transition-all duration-300">No</button>
+                                                </div>
+                                            </div>
+                                        </Dialog>
+                                    </div>
                                 </div>
-
                                 <div className="flex flex-row gap-4">
                                     <p className="text-lg font-medium opacity-65">Collected: </p>
                                     <span className="text-xl font-bold text-primary">{c.collectedDonation}</span>

@@ -68,8 +68,8 @@ export default function Cases() {
                             <TriggerNode />
                         }
                         Spinner={<Spinner id={"CaseFormSpinner"}></Spinner>}
-                        title={"Create or Update Case"}
-                        description={"Provide the following details to create a new case."}
+                        title={"Create Case"}
+                        description={"Provide the following details to create a new case. Please add a proper description including the funding account and phone No. to contact the person in need"}
                     >
                         <CaseForm setCasesStateFn={setCases}></CaseForm>
                     </Sheet>
