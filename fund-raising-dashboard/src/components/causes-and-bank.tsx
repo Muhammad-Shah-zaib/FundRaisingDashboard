@@ -9,11 +9,19 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { startSpinner, stopSpinner } from '@/utils/SpinnerFn';
 import Spinner from "@/shared/component/Spinner";
+import useCauseBankService from "@/customHooks/useCauseBankService";
+import { useEffect, useState } from "react";
+import { TCasueList } from "@/models/DTOs/CauseResponseDto";
 
 interface ICreateCause {
     name: string;
 }
 export default function CausesAndBank() {
+    // Hooks
+    const [causeState, setCauseState] = useState<TCasueList>([]);
+    // Custom Hooks
+    const getAllCauses = useCauseBankService()[1];
+    // Form Hooks
     const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<ICreateCause>();
 
     const onSubmit: SubmitHandler<ICreateCause> = async (data) => {
@@ -26,20 +34,15 @@ export default function CausesAndBank() {
         console.log(data);
     }
 
+    useEffect(() => {
+        getAllCauses(setCauseState);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             {/* Container */}
             <div className="h-full w-full flex flex-col gap-8 px-16 py-4">
-                {/* header */}
-                <header className="flex w-full">
-                    <div className="w-full py-3 px-2 bg-slate-50 shadow-md shadow-slate-400 cursor-default flex flex-col gap-4">
-                        <h2 className="text-3xl font-bold opacity-60">
-                            Total Money in the Bank
-                        </h2>
-                        <span className="text-4xl font-bold self-center">283,990 Rs</span>
-                    </div>
-                </header>
-
                 {/* Create new Cause */}
                 <Sheet>
                     <SheetTrigger asChild>
@@ -101,270 +104,36 @@ export default function CausesAndBank() {
                 {/* Current Cause and there Balance */}
                 <div className="grid grid-cols-2 gap-4 overflow-scroll p-2 max-h-[56vh] relative">
                     {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
+                    {causeState.map(c =>
+                        <>
+                            <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col justify-between min-h-[100px] gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
+                                <div className="w-full flex justify-between">
+                                    <span className="text-start text-lg font-mono font-black">
+                                        {c.causeTitle}
+                                    </span>
+                                    <span>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                            className="w-9 h-9 text-red-400  group-hover:text-red-600"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </span>
+                                </div>
 
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-                    {/* Single Card */}
-                    <div className="group cursor-pointer hover:shadow-none transition-shadow duration-200 flex flex-col gap-4 p-2 bg-yellow-100 hover:bg-yellow-200 rounded-lg shadow-lg">
-                        <div className="w-full flex items-center justify-between">
-                            <span className="text-start text-xl font-black">
-                                Ration Drive
-                            </span>
-                            <span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-9 h-9 text-red-400  group-hover:text-red-600"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Present</p>
-                            <span className="text-xl font-bold text-primary">289,999 Rs</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <p className="text-lg font-medium ">Money Donated So far</p>
-                            <span className="text-xl font-bold text-primary">176, 555</span>
-                        </div>
-                    </div>
-
-
-
-
-
-
-
-
+                                <div className="flex flex-row gap-4">
+                                    <p className="text-lg font-medium opacity-65">Collected: </p>
+                                    <span className="text-xl font-bold text-primary">{c.collectedDonation}</span>
+                                </div>
+                            </div>
+                        </>
+                    )}
 
 
                 </div>

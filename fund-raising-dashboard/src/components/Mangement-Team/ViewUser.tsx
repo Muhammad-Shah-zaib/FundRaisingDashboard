@@ -36,7 +36,7 @@ export default function ViewUserDetails({ user }: IViewDetailsProps) {
                 {/* DATE */}
                 <input id="registrationTS" value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'registration')[0].eventTimestamp).toISOString().split('T')[0]} type="text" disabled={true} className="text-lg px-4 py-0.5 col-span-3 border-2 rounded-lg border-slate-400 hover:border-blue-700 transition-all duration-300 ease-in" />
                 {/* TIME */}
-                <input id="registrationTS" value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'registration')[0].eventTimestamp).toISOString().split('T')[1]} type="text" disabled={true} className="px-4 py-0.5 col-span-3 border-2 rounded-lg border-slate-400 hover:border-blue-700 transition-all duration-300 ease-in" />
+                <input id="registrationTS" value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'registration')[0].eventTimestamp).toISOString().split('T')[1]!.split('.')[0]} type="text" disabled={true} className="px-4 py-0.5 col-span-3 border-2 rounded-lg border-slate-400 hover:border-blue-700 transition-all duration-300 ease-in" />
             </div>
 
             <div className="grid grid-cols-9 items-center gap-1">
@@ -51,7 +51,7 @@ export default function ViewUserDetails({ user }: IViewDetailsProps) {
                             />
                             <input
                                 type="text"
-                                value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'last_login')[0].eventTimestamp).toISOString().split('T')[1]}
+                                value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'last_login')[0].eventTimestamp).toISOString().split('T')[1]!.split('.')[0]}
                                 className="col-span-3 border-2 rounded-lg border-slate-400 transition-all duration-300 easi-in hover:border-blue-700 px-4 py-0.5"
                             />
                         </>
@@ -78,7 +78,7 @@ export default function ViewUserDetails({ user }: IViewDetailsProps) {
                             />
                             <input
                                 type="text"
-                                value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'last_update')[0].eventTimestamp).toISOString().split('T')[1]}
+                                value={new Date(user.userAuthLogsList.filter(l => l.eventType.toLowerCase() === 'last_update')[0].eventTimestamp).toISOString().split('T')[1]!.split('.')[0]}
                                 className="col-span-3 border-2 rounded-lg border-slate-400 transition-all duration-300 easi-in hover:border-blue-700 px-4 py-0.5"
                             />
                         </>

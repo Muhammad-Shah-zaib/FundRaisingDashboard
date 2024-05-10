@@ -33,3 +33,11 @@ export const caseCaseTransactionsUrl: string = `${serverUrl}/CaseTransaction`;
 
 // API endpoint the get all transactions
 export const getAllCaseTransactionsUrl: string = `${caseCaseTransactionsUrl}/GetAllCaseTransactions`;
+
+// * ------------------ CAUSE BANK -------------------
+export const causeBankUrl: string = `${serverUrl}/CauseBank`;
+
+// API endpoint to get all bank amount
+export const getAllBankAmountUrl: string = `${causeBankUrl}/GetAllBankAmount`;
+// API endpoint to get all causes
+export const getAllCausesUrl: string = `${causeBankUrl}/GetAllCauses`;
