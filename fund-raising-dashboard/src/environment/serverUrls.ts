@@ -41,3 +41,14 @@ export const causeBankUrl: string = `${serverUrl}/CauseBank`;
 export const getAllBankAmountUrl: string = `${causeBankUrl}/GetAllBankAmount`;
 // API endpoint to get all causes
 export const getAllCausesUrl: string = `${causeBankUrl}/GetAllCauses`;
+
+// * ------------------ CAUSE -------------------
+export const causeUrl: string = `${serverUrl}/Cause`;
+// API endpoint to add a cause
+export const addCauseUrl: string = `${causeUrl}/addCause`;
+// API endpoint to delete the cause
+export const deleteCauseUrl: string = `${causeUrl}/deleteCause/`;
+// API endpoint to update the cause
+export const updateCauseUrl: string = `${causeUrl}/UpdateCause/`;
+// API endpoint to close the cause
+export const closeCauseUrl: string = `${causeUrl}/CloseCause/`;

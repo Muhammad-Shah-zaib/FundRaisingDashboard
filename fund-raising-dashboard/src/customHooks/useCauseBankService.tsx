@@ -13,23 +13,25 @@ export default function useCauseBankService(): [TGetAllBankAmount, TGetAllCauses
     const _causeBankService: CauseBankService = new CauseBankService();
 
     // function to get all the bank amount
-    const getAllBankAmount: TGetAllBankAmount = (setBankAmountState) => {
+    const getAllBankAmount: TGetAllBankAmount = (setBankAmountState, spinnerId?) => {
+        spinnerId && startSpinner(spinnerId);
         // we need to call the service here
         _causeBankService.getAllBankAmount$()
             .subscribe((res)=> {
                 setBankAmountState(res.totalCurrentDonations);
+                spinnerId && stopSpinner(spinnerId);
             }, (err)=> {
                 console.error(err);
+                spinnerId && stopSpinner(spinnerId);
                 toast.error("Something went wrong",{
                     description: "Please check your network connection, and try again later"
-                }
-                );
+                });
             });
     }
 
 
     // function to gett all the causes
-    const getAllCauses: TGetAllCauses = (setCauseState, spinnerId) => {
+    const getAllCauses: TGetAllCauses = (setCauseState, spinnerId?) => {
         spinnerId && startSpinner(spinnerId);
         // we need to call the service here
         _causeBankService.getAllCauses$()

@@ -3,6 +3,7 @@ import useCauseBankService from "@/customHooks/useCauseBankService";
 import { TCasueList } from "@/models/DTOs/CauseResponseDto";
 import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
+import Spinner from "./Spinner";
 
 export default function SideInfoBar() {
     const [getAllBankAmount, getAllCauses] = useCauseBankService();
@@ -11,7 +12,7 @@ export default function SideInfoBar() {
 
     useEffect(() => {
         getAllBankAmount(setBankAmountState);
-        getAllCauses(setCauseState);
+        getAllCauses(setCauseState, "side-info-bar-spinner");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
@@ -20,7 +21,9 @@ export default function SideInfoBar() {
                 <div className="h-full w-full bg-sky-50 py-20">
 
                     {/* content container */}
-                    <div className="flex px-8 flex-col justify-between gap-4 min-h-[300px]">
+                    <div className="relative flex px-8 flex-col justify-between gap-4 min-h-[300px]">
+                        <Spinner id="side-info-bar-spinner" BgClass="bg-transparent"/>
+                        
                         <h3 className="text-xl font-mono text-slate-600 font-black mb-4">Collections:</h3>
 
                         {causeState?.map(c =>

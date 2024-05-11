@@ -7,35 +7,44 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { SubmitHandler, useForm } from "react-hook-form";
-import { startSpinner, stopSpinner } from '@/utils/SpinnerFn';
 import Spinner from "@/shared/component/Spinner";
 import useCauseBankService from "@/customHooks/useCauseBankService";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TCasueList } from "@/models/DTOs/CauseResponseDto";
 import Dialog from "@/shared/component/Dialog";
 import EditCauseForm from "./EditCauseForm";
 import TriggerClick from "@/utils/TriggerClick";
+import useCauseService from "@/customHooks/useCauseService";
+import { AuthContext } from "@/context/AuthContext";
 
-interface ICreateCause {
-    name: string;
+export interface ICreateCause {
+    causeTitle: string;
     description: string;
+    userCnic: number;
 }
 export default function CausesAndBank() {
     // Hooks
     const [causeState, setCauseState] = useState<TCasueList>([]);
+    const auth = useContext(AuthContext);
     // Custom Hooks
     const getAllCauses = useCauseBankService()[1];
+    const {AddCause,DeleteCause} = useCauseService();
     // Form Hooks
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<ICreateCause>();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ICreateCause>({
+        defaultValues: {
+            causeTitle: "",
+            description: "",
+            userCnic: auth.userCnic
+        }
+    });
 
-    const onSubmit: SubmitHandler<ICreateCause> = async (data) => {
-        startSpinner('causes-spinner');
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        setError('root', {
-            message: "Something went wrong, please try again later."
-        })
-        stopSpinner('causes-spinner');
+    const OnSubmit: SubmitHandler<ICreateCause> = async (data) => {
+        AddCause(data, setCauseState, "add-cause-spinner", "cause-spinner")
         console.log(data);
+    }
+
+    const handleDelete = (causeId: number)=> {
+        DeleteCause(causeId, setCauseState, "dialog-spinner","cause-spinner");
     }
 
     useEffect(() => {
@@ -73,7 +82,7 @@ export default function CausesAndBank() {
                     </SheetTrigger>
                     <SheetContent className="realtive">
                         {/* LOADING SPINNER */}
-                        <Spinner id="causes-spinner"></Spinner>
+                        <Spinner id="add-cause-spinner"></Spinner>
                         <SheetHeader>
                             {/* VALIDATION FOR ROOT ERRORS */}
                             {errors.root && <span className="text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.root.message}</span>}
@@ -82,14 +91,14 @@ export default function CausesAndBank() {
                                 Make sure to add a proper description as is shown to all other users.
                             </SheetDescription>
                         </SheetHeader>
-                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 py-4">
+                        <form onSubmit={handleSubmit(OnSubmit)} className="flex flex-col gap-4 py-4">
                             {/* First Name */}
                             <div className="grid items-center gap-3 grid-cols-3">
                                 <span>
                                     <label htmlFor="causename" className="text-base font-medium text-primary cursor-pointer">Cause Name: </label>
                                 </span>
                                 <input
-                                    {...register("name", {
+                                    {...register("causeTitle", {
                                         required: "Cause Name is required"
                                     })}
                                     id="causename"
@@ -97,7 +106,7 @@ export default function CausesAndBank() {
                                     className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium" placeholder="John"
                                 />
                                 {/* validation for NAME field */}
-                                {errors.name && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.name.message}</span>}
+                                {errors.causeTitle && <span className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.causeTitle.message}</span>}
                             </div>
                             <div className="w-full flex flex-col gap-2">
                                 <textarea {...register("description", {
@@ -142,9 +151,9 @@ export default function CausesAndBank() {
                                             }
                                             title={`Edit ${c.causeTitle} Cause`}
                                         >
-                                            <EditCauseForm cause={c}></EditCauseForm>
+                                            <EditCauseForm cause={c} setCauseState={setCauseState}></EditCauseForm>
                                         </Dialog>
-                                        {/* CLOSE BTN */}
+                                        {/* DELETE BTN */}
                                         <Dialog
                                             TriggerNode={
                                                 <span className="cursor-pointer">
@@ -162,13 +171,13 @@ export default function CausesAndBank() {
                                                     </svg>
                                                 </span>
                                             }
-                                            title={`Close ${c.causeTitle} Cause`}
+                                            title={`Delete ${c.causeTitle} Cause`}
                                             titleClass="text-red-700 font-medium text-lg"
                                         >
                                             <div className="flex flex-col gap-4 font-medium">
                                                 <p>Are you sure you want to close this cause? <em className="text-red-700">You can not undo this later!</em></p>
                                                 <div className="flex gap-4 self-end">
-                                                    <button className="text-lg border-2 border-slate-400 px-4 rounded-lg hover:border-red-700 py-1 hover:bg-red-100 hover:text-red-700 transition-all duration-300">Yes</button>
+                                                    <button onClick={() => handleDelete(c.causeId)} className="text-lg border-2 border-slate-400 px-4 rounded-lg hover:border-red-700 py-1 hover:bg-red-100 hover:text-red-700 transition-all duration-300">Yes</button>
                                                     <button onClick={() => TriggerClick("dialog-close-btn")} className="border-2 border-green-100 hover:border-green-400 text-lg font-medium bg-green-100 text-green-700 rounded-lg px-4 py-1 hover:bg-green-200 transition-all duration-300">No</button>
                                                 </div>
                                             </div>
