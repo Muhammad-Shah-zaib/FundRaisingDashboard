@@ -10,6 +10,7 @@ import { IUpdateCaseRequestDto } from "@/components/EditCauseForm";
 type TAddCause = (newCause: ICreateCause, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
 type TDeleteCause = (causeId: number, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
 type TUpdateCause = (causeId: number, updatedCause: IUpdateCaseRequestDto, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
+type TCloseCause = (casueID: number, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
 
 export default function useCauseService(){
     // we need to implement all the ogic here and then return the functions that we need to use in the component
@@ -71,5 +72,21 @@ export default function useCauseService(){
             })
     }
 
-    return {AddCause, DeleteCause, UpdateCause};
+    const CloseCause: TCloseCause = (casueID, setCauseState, formSpinnerId, causeSpinnerId) => {
+        formSpinnerId && startSpinner(formSpinnerId);
+        _causeService.closeCause$(casueID)
+            .subscribe(() => {
+                formSpinnerId && stopSpinner(formSpinnerId);
+                setCauseState([]);
+                getAllCauses(setCauseState, causeSpinnerId);
+                toast.success("Cause closed successfully")
+            }, () => {
+                formSpinnerId && stopSpinner(formSpinnerId);
+                toast.error("Something went wrong", {
+                    description: "Please check your network connection, and try again later"
+                })
+            })
+    }
+
+    return {AddCause, DeleteCause, UpdateCause, CloseCause};
 }

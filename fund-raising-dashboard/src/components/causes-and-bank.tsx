@@ -13,7 +13,6 @@ import { useContext, useEffect, useState } from "react";
 import { TCasueList } from "@/models/DTOs/CauseResponseDto";
 import Dialog from "@/shared/component/Dialog";
 import EditCauseForm from "./EditCauseForm";
-import TriggerClick from "@/utils/TriggerClick";
 import useCauseService from "@/customHooks/useCauseService";
 import { AuthContext } from "@/context/AuthContext";
 
@@ -28,7 +27,7 @@ export default function CausesAndBank() {
     const auth = useContext(AuthContext);
     // Custom Hooks
     const getAllCauses = useCauseBankService()[1];
-    const {AddCause,DeleteCause} = useCauseService();
+    const {AddCause,DeleteCause, CloseCause} = useCauseService();
     // Form Hooks
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ICreateCause>({
         defaultValues: {
@@ -45,6 +44,9 @@ export default function CausesAndBank() {
 
     const handleDelete = (causeId: number)=> {
         DeleteCause(causeId, setCauseState, "dialog-spinner","cause-spinner");
+    }
+    const handleClose = (causeId: number)=> {
+        CloseCause(causeId, setCauseState, "dialog-spinner","cause-spinner");
     }
 
     useEffect(() => {
@@ -171,14 +173,14 @@ export default function CausesAndBank() {
                                                     </svg>
                                                 </span>
                                             }
-                                            title={`Delete ${c.causeTitle} Cause`}
+                                            title={`Delete or Close ${c.causeTitle} Cause`}
                                             titleClass="text-red-700 font-medium text-lg"
                                         >
                                             <div className="flex flex-col gap-4 font-medium">
-                                                <p>Are you sure you want to close this cause? <em className="text-red-700">You can not undo this later!</em></p>
+                                                <p>Are you sure you want to close or delete this cause? <em className="text-red-700">You can not undo if you delete the cause!</em></p>
                                                 <div className="flex gap-4 self-end">
-                                                    <button onClick={() => handleDelete(c.causeId)} className="text-lg border-2 border-slate-400 px-4 rounded-lg hover:border-red-700 py-1 hover:bg-red-100 hover:text-red-700 transition-all duration-300">Yes</button>
-                                                    <button onClick={() => TriggerClick("dialog-close-btn")} className="border-2 border-green-100 hover:border-green-400 text-lg font-medium bg-green-100 text-green-700 rounded-lg px-4 py-1 hover:bg-green-200 transition-all duration-300">No</button>
+                                                    <button onClick={() => handleClose(c.causeId)} className="text-lg border-2 border-slate-400 px-4 rounded-lg hover:border-yellow-700 py-1 hover:bg-yellow-100 hover:text-yellow-700 transition-all duration-300">Close Cause</button>
+                                                    <button onClick={() => handleDelete(c.causeId)} className="border-2 border-red-100 hover:border-red-400 text-lg font-medium bg-red-100 text-red-700 rounded-lg px-4 py-1 hover:bg-red-200 transition-all duration-300">Delete Cause</button>
                                                 </div>
                                             </div>
                                         </Dialog>

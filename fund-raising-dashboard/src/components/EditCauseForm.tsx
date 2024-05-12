@@ -52,9 +52,6 @@ export default function EditCauseForm({ cause, setCauseState }: EditCauseFormPro
             </div>
 
             <div className="grid grid-cols-3 gap-2 items-center">
-                {
-                    !isDirty
-                }
                 <p className="text-base  px-2 py-0.5 rounded-lg col-span-3 w-full bg-yellow-50 text-yellow-500">Make sure to add a proper description as it is shown to all other users.</p>
                 <label htmlFor="description" className="cursor-pointer font-sans font-medium">Description: </label>
                 <textarea {...register("description", {

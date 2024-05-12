@@ -18,11 +18,10 @@ function App() {
             < BrowserRouter>
                 <AuthContext.Provider value={{ userCnic: 26 }}>
                     <Routes>
-                        <Route path='/' element={<Navigate to="/dashboard" />}></Route>
-                        <Route path='/login' element={<Login></Login>}></Route>
-
                         <Route path='/' element={<AuthGuard></AuthGuard>}>
-
+                        <Route path='/login' element={<Login></Login>}></Route>
+                        
+                            <Route path='/' element={<Navigate to={"/dashboard"}></Navigate>}></Route>
                             <Route path='/' element={<MasterLayout></MasterLayout>}>
                                 <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
                                 <Route path='/causes-bank' element={<CausesAndBank></CausesAndBank>}></Route>
