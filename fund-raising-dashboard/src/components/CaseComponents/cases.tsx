@@ -46,6 +46,7 @@ export default function Cases() {
             }
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const MemorizedFetchAllCases = useCallback(fetchCases$, []);
 
     // state to toggle the border for the header

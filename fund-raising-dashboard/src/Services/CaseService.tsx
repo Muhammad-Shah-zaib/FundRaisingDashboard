@@ -2,6 +2,7 @@ import {
     addCaseUrl,
     deleteCaseUrl,
     getALLCasesUrl,
+    resolveCaseUrl,
     unVerifyCaseUrl,
     updateCaseUrl,
     verifyCaseUrl
@@ -64,6 +65,12 @@ export const unVerifyCase$ = (id: number) => {
                 if (res.status === 403) throw new Error("UnAuthorized access");
             })
         );
+}
+
+
+export const ResolveCase$ = (id: number) => {
+    return ajax.put(resolveCaseUrl + id)
+        .pipe(delay(200));
 }
 
 

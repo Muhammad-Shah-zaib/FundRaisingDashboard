@@ -6,7 +6,10 @@ import { LoginUrl } from "@/environment/serverUrls";
 import { ILoginRequestDto } from "@/models/DTOs/ILoginRequestDto";
 
 interface ILoginResponseDto {
+    userCnic: number;
     email: string;
+    firstName: string,
+    lastName: string;
     token: string;
     status: boolean;
     errors?: string[];
@@ -27,6 +30,10 @@ function useLogin() {
                     const response: ILoginResponseDto = res.response as ILoginResponseDto;
                     if (response.status) {
                         localStorage.setItem('token', response.token);
+                        localStorage.setItem('email', response.email);
+                        localStorage.setItem('firstName', response.firstName);
+                        localStorage.setItem('lastName', response.lastName);
+                        localStorage.setItem('userCnic', response.userCnic.toString());
                         navigate('/dashboard');
                     }
                 })

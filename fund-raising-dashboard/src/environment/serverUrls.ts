@@ -26,6 +26,8 @@ export const updateCaseUrl: string = `${casesUrl}/UpdateCase/`;
 export const verifyCaseUrl: string = `${casesUrl}/VerifyCase`;
 // the unVerifyCaseUrl should be like this: `${caseUrl}/UnVerifyCase/${id}
 export const unVerifyCaseUrl: string = `${casesUrl}/UnVerifyCase`;
+// the API endpoint to resolve case
+export const resolveCaseUrl: string = `${casesUrl}/ResolveCase/`
 
 
 // * ------------------ CASE TRANSACTIONS -------------------

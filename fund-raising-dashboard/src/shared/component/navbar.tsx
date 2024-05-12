@@ -19,6 +19,9 @@ export default function Navbar() {
     const handleLogOut = () => {
         if (confirm("Are you sure you want to log out?")) {
             localStorage.removeItem('token');
+            localStorage.removeItem('email');
+            localStorage.removeItem('firstName');
+            localStorage.removeItem('lastName');
             navigate('login');
         }
     }
@@ -36,12 +39,12 @@ export default function Navbar() {
                     </div>
 
                     <div className="flex flex-col">
-                        <h3 className="text-2xl px-2 font-bold">Samantha</h3>
+                        <h3 className="text-2xl px-2 font-bold">{localStorage.getItem("firstName")} {localStorage.getItem("lastName")}</h3>
                         {/* Drop down to logout and account settings */}
                         <DropdownMenu>
                             <DropdownMenuTrigger className="hover:bg-zinc-900 py-2 pl-2 rounded-lg outline-none">
                                 <div className={`flex gap-2 items-center`}>
-                                    <h4 className="text-sm opacity-50 text-start">samantha@gmail.com</h4>
+                                    <h4 className="text-sm opacity-50 text-start">{localStorage.getItem("email")!}</h4>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={`w-4 h-4`}>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                     </svg>

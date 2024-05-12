@@ -1,6 +1,7 @@
 import { ICreateCause } from "@/components/causes-and-bank";
 import { IUpdateCaseRequestDto } from "@/components/EditCauseForm";
 import { addCauseUrl, closeCauseUrl, deleteCauseUrl, updateCauseUrl } from "@/environment/serverUrls";
+import { ICause } from "@/models/DTOs/CauseResponseDto";
 import { delay } from "rxjs";
 import { ajax } from "rxjs/ajax";
 
@@ -21,8 +22,14 @@ export default class CauseService {
             .pipe(delay(200))
     }
 
-    public closeCause$(causeId: number){
-        return ajax.put(closeCauseUrl + causeId)
+    public closeCause$(cause: ICause){
+        const updatedCause: unknown = {
+            causeTitle: cause.causeTitle,
+            description: cause.causeDescription,
+            userCnic: Number.parseInt(localStorage.getItem("userCnic")!)
+        };
+        console.log(updatedCause);
+        return ajax.put(closeCauseUrl + cause.causeId, updatedCause)
             .pipe(delay(200));
     }
-}
+}   

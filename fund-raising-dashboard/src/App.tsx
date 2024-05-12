@@ -16,11 +16,11 @@ function App() {
     return (
         <>
             < BrowserRouter>
-                <AuthContext.Provider value={{ userCnic: 26 }}>
-                    <Routes>
+                    <AuthContext.Provider value={{ userCnic: localStorage.getItem("userCnic") ? Number.parseInt(localStorage.getItem("userCnic")!) : -1}}>
+                <Routes>
                         <Route path='/' element={<AuthGuard></AuthGuard>}>
-                        <Route path='/login' element={<Login></Login>}></Route>
-                        
+                            <Route path='/login' element={<Login></Login>}></Route>
+
                             <Route path='/' element={<Navigate to={"/dashboard"}></Navigate>}></Route>
                             <Route path='/' element={<MasterLayout></MasterLayout>}>
                                 <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
@@ -32,9 +32,9 @@ function App() {
                                 <Route path='/management-team' element={<ManagementTeam></ManagementTeam>}></Route>
                             </Route>
                         </Route>
-                    </Routes>
-                </AuthContext.Provider>
-            </BrowserRouter>
+                </Routes>
+                    </AuthContext.Provider>
+            </BrowserRouter >
         </>
     )
 }

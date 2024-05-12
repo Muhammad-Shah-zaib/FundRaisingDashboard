@@ -1,5 +1,5 @@
 import { ICreateCause } from "@/components/causes-and-bank";
-import { TCasueList } from "@/models/DTOs/CauseResponseDto";
+import { ICause, TCasueList } from "@/models/DTOs/CauseResponseDto";
 import CauseService from "@/Services/CauseService";
 import { toast } from "sonner";
 import useCauseBankService from "./useCauseBankService";
@@ -10,7 +10,7 @@ import { IUpdateCaseRequestDto } from "@/components/EditCauseForm";
 type TAddCause = (newCause: ICreateCause, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
 type TDeleteCause = (causeId: number, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
 type TUpdateCause = (causeId: number, updatedCause: IUpdateCaseRequestDto, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
-type TCloseCause = (casueID: number, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
+type TCloseCause = (cause: ICause, setCauseState: (causeList: TCasueList) => void, formSpinnerId ?: string, causeSpinnerId ?: string) => void;
 
 export default function useCauseService(){
     // we need to implement all the ogic here and then return the functions that we need to use in the component
@@ -72,17 +72,20 @@ export default function useCauseService(){
             })
     }
 
-    const CloseCause: TCloseCause = (casueID, setCauseState, formSpinnerId, causeSpinnerId) => {
+    const CloseCause: TCloseCause = (cause, setCauseState, formSpinnerId, causeSpinnerId) => {
         formSpinnerId && startSpinner(formSpinnerId);
-        _causeService.closeCause$(casueID)
+        _causeService.closeCause$(cause)
             .subscribe(() => {
                 formSpinnerId && stopSpinner(formSpinnerId);
                 setCauseState([]);
                 getAllCauses(setCauseState, causeSpinnerId);
                 toast.success("Cause closed successfully")
-            }, () => {
+            }, (err) => {
                 formSpinnerId && stopSpinner(formSpinnerId);
-                toast.error("Something went wrong", {
+                if (err.status === 400) toast.error("Cause Closing failed", {
+                    description: "Cause cannot be closed since it doesnt posses any transaction, you may delete the cause"
+                })
+                else toast.error("Something went wrong", {
                     description: "Please check your network connection, and try again later"
                 })
             })

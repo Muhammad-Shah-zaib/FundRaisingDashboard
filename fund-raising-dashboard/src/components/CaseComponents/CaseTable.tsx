@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { CaseList } from '@/models/DTOs/CasesResponseDto';
 import Spinner from '@/shared/component/Spinner';
-import { deleteCaseAsync, getAllCases$, unVerifyCase$ } from "@/Services/CaseService";
+import { getAllCases$, ResolveCase$, unVerifyCase$ } from "@/Services/CaseService";
 import EditCaseForm from "./EditCaseForm";
 import { toast } from "sonner";
 import TriggerClick from "@/utils/TriggerClick";
@@ -99,29 +99,36 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
             }
         })
     }
+    const resolveCase = (id: number) => {
+        startSpinner('dialog-spinner');
+        ResolveCase$(id)
+            .subscribe(() => {
+                setCaseFn([]);
+                stopSpinner('dialog-spinner');
+                startSpinner('CasesTableSpinner');
+                const cases$ = getAllCases$();
+                cases$.subscribe({
+                    next: (res) => {
+                        setCaseFn(res);
+                        stopSpinner("CasesTableSpinner");
+                        toast.success("Case resolved successfully.");
+                    },
+                    error: (err) => {
+                        console.error(err);
 
-    const deleteCase = (id: number, dialogSpinnerId?: string) => {
-        dialogSpinnerId && startSpinner(dialogSpinnerId);
-        const deletedCase$ = deleteCaseAsync(id);
-        deletedCase$.subscribe({
-            next: (res) => {
-                dialogSpinnerId && stopSpinner(dialogSpinnerId);
-                console.log(res.response);
-                setCaseFn && setCaseFn(cases.filter(c => c.caseId !== id));
-                TriggerClick("dialog-close-btn");
-                toast.success("Case Resolved Successfully!");
-            },
-            error: (err) => {
-                console.error(err);
-                TriggerClick("dialog-close-btn");
-                toast.error("Case Resolved Failed!", {
-                    action: {
-                        label: "Retry",
-                        onClick: () => deleteCase(id)
                     }
                 });
-            }
-        })
+            }, () => {
+                stopSpinner('dialog-spinner');
+                toast.error("Case Resolved Failed!", {
+                    description: "Please try again later.",
+                    action: {
+                        label: "Retry",
+                        onClick: () => resolveCase(id)
+                    }
+                });
+
+            })
     }
 
 
@@ -145,7 +152,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                 <TableBody>
                     {
                         cases.map(c => (
-                            <TableRow key={c.caseId} className={`cursor-default duration-300 transition-all ${c.collectedDonations > c.requiredDonations ? 'hover:bg-green-100': null}`}>
+                            <TableRow key={c.caseId} className={`cursor-default duration-300 transition-all ${c.collectedDonations > c.requiredDonations ? 'hover:bg-green-100' : null}`}>
                                 <TableCell className={"font-bold"}>#{c.caseId}</TableCell>
                                 <TableCell className="font-medium">{c.title}</TableCell>
                                 <TableCell>
@@ -175,7 +182,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                 </TableCell>
                                 <TableCell>{c.caseLogs.filter(l => l.logType === 'CREATED_DATE').map(l => l.logDate)}</TableCell>
                                 <TableCell>{c.causeName}</TableCell>
-                                <TableCell className={`font-medium ${c.collectedDonations > c.requiredDonations ? 'text-green-500': null}`}>{c.collectedDonations} / {c.requiredDonations}</TableCell>
+                                <TableCell className={`font-medium ${c.collectedDonations > c.requiredDonations ? 'text-green-500' : null}`}>{c.collectedDonations} / {c.requiredDonations}</TableCell>
                                 {/* ACTIONS */}
                                 <TableCell className="text-end">
                                     <DropdownMenu>
@@ -233,7 +240,7 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                                         <button
                                                             className="bg-red-50 rounded-lg hover:bg-red-200 text-red-800 transition-all duration-300 px-2 py-1 m-1 w-full text-start font-bold text-base"
                                                         >
-                                                            Delete Case
+                                                            Resolve Case
                                                         </button>
                                                     }
                                                     title={`Case# ${c.caseId}`}
@@ -248,10 +255,8 @@ function CaseTable({ cases, setCaseFn }: ICaseTableProps) {
                                                             <button onClick={() => TriggerClick("dialog-close-btn")}
                                                                 className="bg-slate-50 text-black font-medium shadow-md shadow-slate-400 border hover:border-sky-700 rounded-lg px-4 py-2 hover:bg-slate-100 transition-all duration-300 hover:border">Cancel
                                                             </button>
-                                                            <button onClick={() => {
-                                                                deleteCase(c.caseId, 'dialog-spinner');
-                                                            }}
-                                                                className="bg-red-200 text-red-800 hover:bg-red-300 transition-all duration-300 font-bold shadow-md shadow-slate-400 rounded-lg px-4 py-2">Delete
+                                                            <button onClick={() => resolveCase(c.caseId)}
+                                                                className="bg-red-200 text-red-800 hover:bg-red-300 transition-all duration-300 font-bold shadow-md shadow-slate-400 rounded-lg px-4 py-2">Resolve
                                                             </button>
                                                         </div>
 
