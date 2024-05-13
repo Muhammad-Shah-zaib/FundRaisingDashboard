@@ -8,6 +8,7 @@ import { ajax } from "rxjs/ajax";
 export default class CauseService {
 
     public AddCause$( newCause: ICreateCause){
+        newCause.userCnic = Number.parseInt(localStorage.getItem("userCnic")!);
         return ajax.post(addCauseUrl, newCause)
             .pipe(delay(200))
     }
@@ -18,6 +19,7 @@ export default class CauseService {
     }
 
     public updateCause$(causeId: number, updatedCause: IUpdateCaseRequestDto){
+        updatedCause.userCnic = Number.parseInt(localStorage.getItem("userCnic")!);
         return ajax.put(updateCauseUrl + causeId, updatedCause)
             .pipe(delay(200))
     }

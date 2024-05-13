@@ -22,11 +22,12 @@ export default function Navbar() {
             localStorage.removeItem('email');
             localStorage.removeItem('firstName');
             localStorage.removeItem('lastName');
+            localStorage.removeItem('userCnic');
             navigate('login');
         }
     }
 
-    return (
+    return (    
         // Container
         <div className="py-20 text-white bg-[#101010] h-full w-full pr-2">
             {/* Content container */}
