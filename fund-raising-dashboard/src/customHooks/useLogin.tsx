@@ -28,6 +28,7 @@ function useLogin() {
                 // tapping the response adn checking the response status
                 tap((res) => {
                     const response: ILoginResponseDto = res.response as ILoginResponseDto;
+                    console.log(response.token);
                     if (response.status) {
                         localStorage.setItem('token', response.token);
                         localStorage.setItem('email', response.email);

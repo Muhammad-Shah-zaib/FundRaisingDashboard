@@ -77,7 +77,7 @@ function EditCaseForm({ caseId, setCasesStateFn, existingCase }: IEditCaseFormPr
                     <option value="TUITION_FEE">Tuition Fee</option>
                 </select>
                 <div className="flex gap-2 items-center">
-                    <input type="checkbox" checked={existingCase.verifiedStatus} onChange={(e)=> setValue("verifiedStatus", e.target.checked)} name="verifiedStatus" id="verifiedStatus" />
+                    <input type="checkbox" {...register("verifiedStatus")} onChange={(e)=> setValue("verifiedStatus", e.target.checked)} name="verifiedStatus" id="verifiedStatus" />
                     <label htmlFor="verifiedStatus" className="cursor-pointer font-medium select-none">Verified Status</label>
                 </div>
             </div>

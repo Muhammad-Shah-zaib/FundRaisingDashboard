@@ -5,7 +5,7 @@ import Spinner from "@/shared/component/Spinner.tsx";
 import { startSpinner, stopSpinner } from "@/utils/SpinnerFn.ts";
 import CaseForm from "./CaseForm";
 import CaseTable from "./CaseTable";
-import { getAllCases$ } from "@/Services/CaseService.tsx";
+import { getAllCases$ } from "@/Services/CaseService.ts";
 import { toast } from "sonner";
 
 

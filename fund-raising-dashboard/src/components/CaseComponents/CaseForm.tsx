@@ -17,7 +17,7 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
             description: "",
             causeName: "MESS_FEE",
             verifiedStatus: false,
-            requiredDonations: 0
+            requiredDonations: 0,
         }
     });
 
@@ -27,6 +27,7 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
         addCase$.subscribe({
             next: () => {
                 // Since new case is added, so we need to update the state
+                setCasesStateFn([]);
                 const cases$ = getAllCases$();
                 cases$.subscribe({
                     next: (res) => {
@@ -42,7 +43,7 @@ function CaseForm({ setCasesStateFn }: ICaseFormProps) {
                     }
                 })
             },
-            // error for failing the in adding case
+            // error for failing the in adding case 
             error: (err) => {
                 stopSpinner("CaseFormSpinner");
                 if (err.status === 500)
