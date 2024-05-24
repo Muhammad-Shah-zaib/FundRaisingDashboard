@@ -2,7 +2,6 @@ import useLogin from '@/customHooks/useLogin';
 import './login.css';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ILoginRequestDto } from '@/models/DTOs/ILoginRequestDto';
-import { imgXlinkHref } from './LoginImgXlinkHref';
 import { startSpinner, stopSpinner } from '@/utils/SpinnerFn';
 import Spinner from '../component/Spinner';
 
@@ -63,31 +62,7 @@ function Login() {
 
             {/* Image And LOGO container */}
             <div className="w-full bg-primary flex justify-center items-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                    width={400}
-                    height={500}
-                    fill="none"
-                >
-                    <path fill="url(#a)" d="M0 0h500v500H0z" />
-                    <defs>
-                        <pattern
-                            id="a"
-                            width={1}
-                            height={1}
-                            patternContentUnits="objectBoundingBox"
-                        >
-                            <use xlinkHref="#b" transform="matrix(.00333 0 0 .00333 -.157 0)" />
-                        </pattern>
-                        <image
-                            xlinkHref={imgXlinkHref}
-                            id="b"
-                            width={300}
-                            height={300}
-                        />
-                    </defs>
-                </svg>
+                <img className='max-w-[400px] max-h-[400px]' src="logo.jpg" />
             </div>
 
             {/* Login Form container */}

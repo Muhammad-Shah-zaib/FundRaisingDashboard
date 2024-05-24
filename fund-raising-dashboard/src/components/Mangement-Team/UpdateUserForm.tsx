@@ -17,7 +17,9 @@ function UpdateUserForm({ setUserState, user }: IUpdateUserFormProps) {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            userType: user.userType
+            userType: user.userType,
+            cms: 0,
+            phoneNo: ''
         }
     });
 
@@ -39,8 +41,8 @@ function UpdateUserForm({ setUserState, user }: IUpdateUserFormProps) {
                 <div className="col-span-5 flex flex-col gap-2">
                     <input {...register("firstName", { required: "Firstname is required" })} id="firstname" type="text" className="w-full border-2 border-slate-400 rounded-lg px-4 py-1 bg-slate-100 hover:border-blue-700 transition-all duration-300 ease-in outline-blue-700" />
                 </div>
-                {errors.firstName && <span className={`col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
-                `}>{errors.firstName?.message}</span>}
+                {errors.firstName && <span className={`font-medium font-sans col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
+                `}>- {errors.firstName?.message}</span>}
             </div>
 
             {/* LAST-NAME */}
@@ -48,7 +50,7 @@ function UpdateUserForm({ setUserState, user }: IUpdateUserFormProps) {
                 <label htmlFor="lastname" className="col-span-2">Lastname: </label>
                 <input {...register("lastName")} id="lastname" type="text" className="col-span-5 border-2 border-slate-400 rounded-lg px-4 py-1 bg-slate-100 hover:border-blue-700 transition-all duration-300 ease-in outline-blue-700" />
                 {errors.lastName && <span className={`col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
-                `}>{errors.lastName?.message}</span>}
+                `}>- {errors.lastName?.message}</span>}
 
             </div>
 
@@ -62,10 +64,61 @@ function UpdateUserForm({ setUserState, user }: IUpdateUserFormProps) {
                         message: "Invalid Email Address"
                     }
                 })} id="email" type="text" className="col-span-5 border-2 border-slate-400 rounded-lg px-4 py-1 bg-slate-100 hover:border-blue-700 transition-all duration-300 ease-in outline-blue-700" />
-                {errors.email && <span className={`col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
-                `}>{errors.email?.message}</span>}
+                {errors.email && <span className={`font-medium font-sans col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
+                `}>- {errors.email?.message}</span>}
             </div>
-
+            {/* CMS */}
+                    <div className="grid grid-cols-8 items-center">
+                        <span className="col-span-2">
+                            <label htmlFor="cms">
+                                CMS: <strong
+                                    className="text-red-500">*</strong></label>
+                        </span>
+                        <input
+                            {...register("cms", {
+                                required: "CMS-(Registration ID) is required",
+                                minLength: {
+                                    value: 6,
+                                    message: "Cms must be of 6 length"
+                                },
+                                maxLength: {
+                                    value: 6,
+                                    message: "Cms must have 6 digits"
+                                }
+                            })}
+                            id="cms"
+                            type="number"
+                            className="col-span-5 border-2 border-slate-400 rounded-lg px-4 py-1 bg-slate-100 hover:border-blue-700 transition-all duration-300 ease-in outline-blue-700"
+                            placeholder="123456"
+                        />
+                        {/* Validation for Cms field */}
+                        {errors.cms && <span
+                            className="font-medium font-sans col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm">- {errors.cms.message}</span>}
+                    </div>
+                    {/* Phone No. */}
+                    <div className="grid grid-cols-8 items-center">
+                        <span className="col-span-2">
+                            <label htmlFor="cms">
+                                    Phone No: <strong className="text-red-500">*</strong>
+                            </label>
+                        </span>
+                        <input
+                            {...register("phoneNo", {
+                                required: "Phone No. is required",
+                                pattern: {
+                                    value: /^\+923\d{9}$/,
+                                    message: "Phone No. must start with +923 and must have 9 digits"
+                                }
+                            })}
+                            id="phoneNo"
+                            type="text"
+                            className="col-span-5 border-2 border-slate-400 rounded-lg px-4 py-1 bg-slate-100 hover:border-blue-700 transition-all duration-300 ease-in outline-blue-700"
+                            placeholder="+923*********"
+                        />
+                        {/* Validation for Phone Nno. field */}
+                        {errors.phoneNo && <span
+                            className="font-medium font-sans col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm">- {errors.phoneNo.message}</span>}
+                    </div>
             {/* USER TYPE */}
             <div className="grid grid-cols-8 items-center">
                 <label className="col-span-2 ">User Type: </label>
@@ -73,8 +126,8 @@ function UpdateUserForm({ setUserState, user }: IUpdateUserFormProps) {
                     <option value={`MODERATOR`}>Moderator</option>
                     <option value={`STAFF_MEMBER`}>Staff member</option>
                 </select>
-                {errors.userType && <span className={`col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
-                `}>{errors.userType?.message}</span>}
+                {errors.userType && <span className={`font-medium font-sans col-span-5 col-start-3 w-full px-4 py-1 text-red-500 text-sm 
+                `}>- {errors.userType?.message}</span>}
 
             </div>
 

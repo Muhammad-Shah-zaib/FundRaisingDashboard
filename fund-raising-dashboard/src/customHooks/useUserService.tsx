@@ -44,12 +44,10 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDel
 
     // TO REGISTER A USER
     const RegisterUser: TRegisterUserFn = (setUserState: (userList: IUserResponseDtoList) => void, data: IRegistrationRequestDto, spinnerId?: string) => {
+        spinnerId && startSpinner(spinnerId);
         const registerUser$ = _userService.RegisterUser$(data);
 
         registerUser$.subscribe((res) => {
-            console.group("Grouping")
-            console.warn(res)
-            console.groupEnd();
             // since new user is added, so now we need to fetch the new data again
             if (res.status === 200) {
                 GetAllUsers(setUserState)
@@ -60,7 +58,6 @@ export default function useUserService(): [TGetAllUsersFn, TRegisterUserFn, TDel
         }, (err) => {
             console.error(err);
             toast.error("User registration failed");
-
             // STOPPING SPINNER
             spinnerId && stopSpinner(spinnerId);
         });

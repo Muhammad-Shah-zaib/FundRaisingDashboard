@@ -1,6 +1,5 @@
 import Sheet from "@/shared/component/Sheet";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { startSpinner } from "@/utils/SpinnerFn.ts";
 import Spinner from "@/shared/component/Spinner.tsx";
 import useUserService from "@/customHooks/useUserService.tsx";
 import { IRegistrationRequestDto } from "@/models/DTOs/RegistrationRequest.ts";
@@ -20,13 +19,14 @@ export default function NewUserForm({ setUserStateFn }: INewUserFormProps) {
             lastName: "",
             email: "",
             password: "",
-            userType: "MODERATOR"
+            userType: "MODERATOR",
+            cms: 0,
+            phoneNo: ""
         }
     });
 
     // Function to handle the form submission
     const onSubmit: SubmitHandler<IRegistrationRequestDto> = async (data) => {
-        startSpinner("MT-spinner");
         // we need to send the registration request
         console.log(data);
         RegisterUser(setUserStateFn, data, "MT-spinner");
@@ -137,6 +137,58 @@ export default function NewUserForm({ setUserStateFn }: INewUserFormProps) {
                             className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.password.message}</span>}
                     </div>
 
+                    {/* CMS */}
+                    <div className="grid items-center gap-3 grid-cols-3">
+                        <span>
+                            <label htmlFor="cms"
+                                className="text-base font-medium text-primary cursor-pointer">CMS: <strong
+                                    className="text-red-500">*</strong></label>
+                        </span>
+                        <input
+                            {...register("cms", {
+                                required: "CMS-(Registration ID) is required",
+                                minLength: {
+                                    value: 6,
+                                    message: "Cms must be of 6 length"
+                                },
+                                maxLength: {
+                                    value: 6,
+                                    message: "Cms must have 6 digits"
+                                }
+                            })}
+                            id="cms"
+                            type="number"
+                            className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium"
+                            placeholder="123456"
+                        />
+                        {/* Validation for Cms field */}
+                        {errors.cms && <span
+                            className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.cms.message}</span>}
+                    </div>
+                    {/* Phone No. */}
+                    <div className="grid items-center gap-3 grid-cols-3">
+                        <span>
+                            <label htmlFor="cms"
+                                className="text-base font-medium text-primary cursor-pointer">Phone No: <strong
+                                    className="text-red-500">*</strong></label>
+                        </span>
+                        <input
+                            {...register("phoneNo", {
+                                required: "Phone No. is required",
+                                pattern: {
+                                    value: /^\+923\d{9}$/,
+                                    message: "Phone No. must start with +923 and must have 9 digits"
+                                }
+                            })}
+                            id="phoneNo"
+                            type="text"
+                            className="col-span-2 outline-none border-2 border-slate-400 rounded-lg text-primary px-4 py-1 font-medium"
+                            placeholder="+923*********"
+                        />
+                        {/* Validation for Phone Nno. field */}
+                        {errors.phoneNo && <span
+                            className="col-span-3 text-sm text-red-700 select-none font-bold bg-red-100 px-4 py-2 rounded-md">{errors.phoneNo.message}</span>}
+                    </div>
                     <div className={`w-full`}>
                         <select {...register("userType")} className={`SELECT-ARROW w-full py-2 px-4 border-2 rounded-lg border-slate-400 shadow-sm shadow-slate-400 outline-blue-700 transition-all duration-300 hover:border-blue-700`}>
                             <option value={`MODERATOR`}>Moderator</option>
